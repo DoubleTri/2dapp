@@ -1,18 +1,51 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { db } from "./firebase";
+import { db, auth } from "./firebase";
 import logo from './logo.svg';
-import { SwatchesPicker  } from 'react-color';
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  Redirect,
+} from "react-router-dom";
+
 import './App.scss';
+
+import Login from './components/Login';
 
 import { simpleAction, add } from './actions/simpleAction'
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: null
+    }
+  }
 
   componentWillMount() {
-    db.on("value", snap => { 
+
+    db.on("value", snap => {
       this.props.simpleAction(snap.val());
     })
+
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        let user = auth.currentUser
+        this.setState({ user })
+        console.log(user)
+      } else {
+        console.log('no user')
+      }
+    })
+
+  }
+
+  logout() {
+    console.log('logged out...')
+    auth.signOut();
+    this.setState({ user: null })
   }
 
   handleChange(color, event) {
@@ -28,17 +61,9 @@ class App extends Component {
    <div className="App">
     <header className="App-header">
      <img src={logo} className="App-logo" alt="logo" />
-     <h1 className="App-title" style={{color: this.props.simpleReducer.result}}>Welcome to React</h1>
-      <div className="App-intro">
-        <SwatchesPicker onChange={ this.add } />
-        <ul>{this.props.simpleReducer.pastColor ? Object.values(this.props.simpleReducer.pastColor).map((color, i) => 
-          <li key={i} style={{color: color}}>{color}</li>)
-        :
-        "loading...."
-        }
-        </ul>
-      </div>
     </header>
+    {this.state.user? null : <Login />}
+    <p onClick={this.logout.bind(this)}>Log Out</p>
    </div>
   );
  }
