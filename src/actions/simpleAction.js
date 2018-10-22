@@ -3,7 +3,14 @@ import { db } from "../firebase";
 export const login = email => async dispatch => {
     dispatch({
         type: 'LOGIN_ACTION',
-        payload: email
+        result: email
+    })
+};
+
+export const store = storeObj => async dispatch => {
+    dispatch({
+        type: 'STORE_ACTION',
+        store: storeObj
     })
 };
 

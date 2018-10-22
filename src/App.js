@@ -16,30 +16,32 @@ import 'antd/dist/antd.css';
 import Login from './components/Login';
 import UserHome from './components/UserHome';
 
-import { simpleAction, login } from './actions/simpleAction'
+import { simpleAction, login, store } from './actions/simpleAction'
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: null
+      user: null,
+      store: null
     }
   }
 
   componentWillMount() {
 
-    // db.on("value", snap => {
-    //   this.props.login(snap.val());
-    // })
+    db.on("value", snap => {
+      this.props.store(snap.val());
+    })
 
     auth.onAuthStateChanged(user => {
       if (user) {
         let user = auth.currentUser
-        this.setState({ user })
-        console.log(user.uid)
         this.handleLogin(user.email)
+        this.setState({ user: user.email })
+        console.log(user.email)
+        
       } else {
-        console.log('no user')
+        console.log(this.props.login.email)
       }
     })
 
@@ -54,6 +56,7 @@ class App extends Component {
 
   handleLogin(email) {
     this.props.login(email)
+    console.log('handleLogin fired ' + email)
   }
 
   add = (color, event) => {
@@ -69,7 +72,7 @@ class App extends Component {
       {...rest}
       render={props =>
         this.state.user ? (
-          <Component {...props} user={this.state.user.email}/>
+          <Component {...props} email={this.state.user}/>
         ) : (
           <Redirect
             to={{
@@ -99,7 +102,7 @@ class App extends Component {
       <PrivateRoute exact path="/" component={UserHome} />
       
       <Route path="/login" render={() => (
-        !this.state.user ? (<Route component={(props) =>
+        !this.state.user? (<Route component={(props) =>
           (<Login {...props} />)}
         />)
           :  <Redirect
@@ -122,7 +125,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   simpleAction: (obj) => dispatch(simpleAction(obj)),
-  login: (email) => dispatch(login(email))
+  login: (email) => dispatch(login(email)),
+  store: (storeObj) => dispatch(store(storeObj))
  })
 
 
