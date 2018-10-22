@@ -8,6 +8,7 @@ render() {
     return ( 
         <div className = "UserHome" >
             <h3>User Home</h3>
+            <p>{this.props.login.result}</p>
         </div>
         );
     }

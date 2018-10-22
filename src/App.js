@@ -16,7 +16,7 @@ import 'antd/dist/antd.css';
 import Login from './components/Login';
 import UserHome from './components/UserHome';
 
-import { simpleAction, add } from './actions/simpleAction'
+import { simpleAction, login } from './actions/simpleAction'
 
 class App extends Component {
   constructor(props) {
@@ -52,7 +52,7 @@ class App extends Component {
   }
 
   handleLogin(email) {
-    console.log('redux funciton called.... ' + email)
+    this.props.login(email)
   }
 
   add = (color, event) => {
@@ -121,7 +121,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   simpleAction: (obj) => dispatch(simpleAction(obj)),
-  add: (color) => dispatch(add(color))
+  login: (email) => dispatch(login(email))
  })
 
 

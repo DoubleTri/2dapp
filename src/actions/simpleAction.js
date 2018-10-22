@@ -1,5 +1,12 @@
 import { db } from "../firebase";
 
+export const login = email => async dispatch => {
+    dispatch({
+        type: 'LOGIN_ACTION',
+        payload: email
+    })
+};
+
 export const add = color => async dispatch => {
     var arr = db.child('pastColor').push();
     arr.set(color);
