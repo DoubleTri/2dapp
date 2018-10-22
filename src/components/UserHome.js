@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { db } from "../firebase";
 
 class UserHome extends Component {
 
@@ -11,4 +13,14 @@ render() {
     }
 }
 
-export default UserHome;
+const mapStateToProps = state => ({
+    ...state
+   })
+  
+const mapDispatchToProps = dispatch => ({
+    // simpleAction: (obj) => dispatch(simpleAction(obj)),
+    // add: (color) => dispatch(add(color))
+})
+  
+  
+export default connect(mapStateToProps, mapDispatchToProps)(UserHome);
