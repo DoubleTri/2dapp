@@ -6,7 +6,7 @@ class UserHome extends Component {
 
 componentWillMount() {
    
-    db.child('users').orderByChild('email').equalTo(this.props.login.email).on("value", function (snap) {
+    db.child('users').orderByChild('email').equalTo(this.props.user).on("value", function (snap) {
         snap.forEach(function (data) {
           console.log(data.key)
       })
