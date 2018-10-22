@@ -28,9 +28,9 @@ class App extends Component {
 
   componentWillMount() {
 
-    db.on("value", snap => {
-      this.props.simpleAction(snap.val());
-    })
+    // db.on("value", snap => {
+    //   this.props.login(snap.val());
+    // })
 
     auth.onAuthStateChanged(user => {
       if (user) {
@@ -49,6 +49,7 @@ class App extends Component {
     console.log('logged out...')
     auth.signOut();
     this.setState({ user: null })
+    this.handleLogin(null)
   }
 
   handleLogin(email) {
@@ -68,7 +69,7 @@ class App extends Component {
       {...rest}
       render={props =>
         this.state.user ? (
-          <Component {...props} />
+          <Component {...props} user={this.state.user.email}/>
         ) : (
           <Redirect
             to={{
