@@ -57,9 +57,20 @@ function App() {
           <p onClick={logout}>Log Out</p> 
           <Switch>
 
-            <Route exact path="/create-account" component={CreateAccount} />
+            {/* <Route exact path="/create-account" component={CreateAccount} /> */}
 
             <PrivateRoute exact path="/" component={UserHome} />
+
+            <Route path="/create-account" render={() => (
+              !user ? (<Route component={(props) =>
+                (<CreateAccount {...props} />)}
+              />)
+                : <Redirect
+                  to={{
+                    pathname: "/",
+                  }}
+                />
+            )} />
 
             <Route path="/login" render={() => (
               !user ? (<Route component={(props) =>

@@ -27,15 +27,29 @@ const [accountObj, setAccountObj] = useState({
 //     });
 //   }, [props.pointObj]);
 
-const handleSubmit = (e) => {
-    e.preventDefault();
-    props.form.validateFields((err, values) => {
-        if (!err) {
-            console.log(accountObj)
-            props.form.resetFields()
-        } 
-    })
-}
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        props.form.validateFields((err, values) => {
+            if (!err) {
+                console.log(accountObj)
+                props.form.resetFields()
+
+                auth.createUserWithEmailAndPassword(accountObj.email, accountObj.password).catch(function (error) {
+                    alert(error)
+                });
+
+                db.ref().child('users/' + accountObj.lastName).set({
+                    firstName: accountObj.firstName, 
+                    lastName: accountObj.lastName,
+                    name: accountObj.firstName + ' ' + accountObj.lastName,  
+                    email: accountObj.email, 
+                    twoDFirstName: accountObj.twoDFirstName,
+                    twoDLastName: accountObj.twoDLastName,
+                    twoDEmail: accountObj.twoDEmail
+                });
+            }
+        })
+    }
 
 const onChangeText = (e) => {
     let newAccountObj = Object.assign({}, accountObj);
