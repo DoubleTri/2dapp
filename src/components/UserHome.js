@@ -1,46 +1,30 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { db } from "../firebase";
+import React, { useState, useEffect  } from 'react';
+import { db } from '../firebase'
 
-class UserHome extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          user: this.props.login.email
-        }
-      }
+import AddPoints from './addPoints/AddPoints'
 
-componentWillMount() {
+function UserHome(props) {
 
+  const [obj, setObj] = useState(null); 
+
+  useEffect(() => {
+    db.ref('users').orderByChild('email').equalTo(props.email).once("value", function (snap) {
+      snap.forEach(function (data) {
+        db.ref('users/' + data.key).once("value", function (snapTwo) {
+          snap.forEach(function (name) { setObj(snapTwo.val()) })
+        })
+      });
+    });
+  }, [props.email]);
+
+  return (
+    <div className="UserHome">
+        <h3>User Home</h3>
+        <p>{ obj ? obj.name : 'loading....' }</p>
+        <AddPoints />
+    </div>
+  );
 }
 
-render() {
-
-    var points = this.props.store.store ?
-        <ul>
-            {Object.values(this.props.store.store.users.Boss.points).map((point, i) => {
-            return <li key={i}>{point}</li>}) }
-        </ul> 
-        : 'loading...';
-
-    return ( 
-        <div className = "UserHome" >
-            <h3>User Home</h3>
-            <p>{this.props.login.email}</p>
-            <p>{points}</p>
-        </div>
-        );
-    }
-}
-
-const mapStateToProps = state => ({
-    ...state
-   })
-  
-const mapDispatchToProps = dispatch => ({
-    // simpleAction: (obj) => dispatch(simpleAction(obj)),
-    // login: (email) => dispatch(login(email))
-})
-  
-  
-export default connect(mapStateToProps, mapDispatchToProps)(UserHome);
+export default UserHome; 
+ 
