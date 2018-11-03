@@ -50,35 +50,38 @@ const formItemLayout = {
   },
 };
 
-  return (
-    <div className="AddPoints">
-        <h3>AddPoints</h3>
+    return (
+        <div className="AddPoints">
+            <h3>AddPoints</h3>
 
-        <Form onSubmit={handleSubmit} className="login-form">
-        <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
-          <FormItem>
-            {getFieldDecorator('points', {
-              rules: [{ required: true, message: 'Please enter your email.' }],
-            })(
-            <InputNumber min={0} max={10} onChange={onChangeSelect}/>
-              )}
-          </FormItem>
-          <FormItem>
-            {getFieldDecorator('action', {
-              rules: [{ required: true, message: 'Please enter the action receiving points.' }],
-            })(
-              <Input onChange={onChangeText} placeholder="Action" />
-              )}
-          </FormItem>
-          <FormItem>
-            <Button htmlType="submit">Log in</Button>
-            <br />
-          </FormItem>
-          </Col>
-        </Form>
+            <Form onSubmit={handleSubmit} className="login-form">
+                <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
 
-    </div>
-  );
+                    <FormItem>
+                        {getFieldDecorator('points', {
+                            rules: [{ required: true, message: 'Please enter your email.' }],
+                        })(
+                            <InputNumber min={0} max={10} onChange={onChangeSelect} />
+                            )}
+                    </FormItem>
+
+                    <FormItem>
+                        {getFieldDecorator('action', {
+                            rules: [{ required: true, message: 'Please enter the action receiving points.' }],
+                        })(
+                            <Input onChange={onChangeText} placeholder="Action" />
+                            )}
+                    </FormItem>
+                    <FormItem>
+                        <Button htmlType="submit">Log in</Button>
+                        <br />
+                    </FormItem>
+
+                </Col>
+            </Form>
+
+        </div>
+    );
 }
 
 const AddPoints = Form.create()(AddPointsFormForm);

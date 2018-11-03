@@ -14,6 +14,7 @@ import 'antd/dist/antd.css';
 
 import Login from './components/Login';
 import UserHome from './components/UserHome';
+import CreateAccount from './components/CreateAccount';
 
 
 function App() {
@@ -55,6 +56,8 @@ function App() {
           {/* Header will go below */}
           <p onClick={logout}>Log Out</p> 
           <Switch>
+
+            <Route exact path="/create-account" component={CreateAccount} />
 
             <PrivateRoute exact path="/" component={UserHome} />
 
