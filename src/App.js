@@ -8,13 +8,13 @@ import {
 } from "react-router-dom";
 
 import { db, auth } from "./firebase";
-import logo from './logo.svg';
 import './App.scss';
 import 'antd/dist/antd.css'; 
 
 import Login from './components/Login';
 import UserHome from './components/UserHome';
 import CreateAccount from './components/CreateAccount';
+import Invite from './components/Invite';
 
 
 function App() {
@@ -54,7 +54,7 @@ function App() {
         <div>
 
           {/* Header will go below */}
-          <p onClick={logout}>Log Out</p> 
+          { user? <p onClick={logout}>Log Out</p> : null} 
           <Switch>
 
             {/* <Route exact path="/create-account" component={CreateAccount} /> */}
@@ -64,6 +64,17 @@ function App() {
             <Route path="/create-account" render={() => (
               !user ? (<Route component={(props) =>
                 (<CreateAccount {...props} />)}
+              />)
+                : <Redirect
+                  to={{
+                    pathname: "/",
+                  }}
+                />
+            )} />
+
+            <Route path="/invite" render={() => (
+              !user ? (<Route component={(props) =>
+                (<Invite {...props} />)}
               />)
                 : <Redirect
                   to={{

@@ -5,7 +5,7 @@ import {  Form, Input, Button, Select, message, Tooltip, Icon, notification, Col
 
 const FormItem = Form.Item;
 
-function CreateAccountForm(props) {
+function InviteForm(props) {
 
 const [accountObj, setAccountObj] = useState({ 
     firstName: null, 
@@ -68,7 +68,7 @@ const formItemLayout = {
 
   return (
     <div className="CreateAccount">
-        <h3>Create Account</h3>
+        <h3>Invite</h3>
 
           <Form onSubmit={handleSubmit} className="CreateAccountForm">
               <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
@@ -147,6 +147,6 @@ const formItemLayout = {
   );
 }
 
-const CreateAccount = Form.create()(CreateAccountForm);
+const Invite = Form.create()(InviteForm);
 
-export default CreateAccount; 
+export default Invite; 

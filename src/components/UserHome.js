@@ -7,15 +7,15 @@ function UserHome(props) {
 
   const [obj, setObj] = useState(null); 
 
-  useEffect(() => {
-    db.ref('users').orderByChild('email').equalTo(props.email).once("value", function (snap) {
-      snap.forEach(function (data) {
-        db.ref('users/' + data.key).once("value", function (snapTwo) {
-          snap.forEach(function (name) { setObj(snapTwo.val()) })
-        })
-      });
-    });
-  }, [props.email]);
+  // useEffect(() => {
+  //   db.ref('users').orderByChild('email').equalTo(props.email).once("value", function (snap) {
+  //     snap.forEach(function (data) {
+  //       db.ref('users/' + data.key).once("value", function (snapTwo) {
+  //         snap.forEach(function (name) { setObj(snapTwo.val()) })
+  //       })
+  //     });
+  //   });
+  // }, [props.email]);
 
   return (
     <div className="UserHome">

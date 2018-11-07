@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { auth } from '../firebase';
+import { Link } from "react-router-dom";
 import { Modal, Form, Icon, Input, Button, Col } from 'antd';
 
 const FormItem = Form.Item;
@@ -104,6 +105,7 @@ class LoginForm extends Component {
             <Button htmlType="submit">Log in</Button>
             <br />
             <a onClick={this.show.bind(this)}>Forgot password</a>
+            <p><Link to="/create-account">Create Account </Link></p>
           </FormItem>
           </Col>
         </Form>
