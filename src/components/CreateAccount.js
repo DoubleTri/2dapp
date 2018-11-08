@@ -30,9 +30,10 @@ console.log(Date.now())
                     alert(error)
                 });
 
-                const uid =  Date.now();
+                const uid =  accountObj.lastName + '-' + Date.now();
 
-                db.child('users/' + accountObj.lastName + '-' + uid).set({
+                db.child('users/' +  uid).set({
+                    uid: uid,
                     firstName: accountObj.firstName, 
                     lastName: accountObj.lastName,
                     name: accountObj.firstName + ' ' + accountObj.lastName,  
@@ -41,6 +42,20 @@ console.log(Date.now())
                     twoDLastName: accountObj.twoDLastName,
                     twoDEmail: accountObj.twoDEmail
                 });
+
+                // db.child('users/' +  uid).set({
+                //     uid: uid,
+                //     [accountObj.firstName + ' ' + accountObj.lastName]: {                
+                //         firstName: accountObj.firstName, 
+                //         lastName: accountObj.lastName
+                //     },
+                //     partnerAEmail: accountObj.email,
+                //     [accountObj.twoDFirstName + ' ' + accountObj.twoDLastName]: {
+                //         twoDFirstName: accountObj.twoDFirstName,
+                //         twoDLastName: accountObj.twoDLastName
+                //     }, 
+                //     partnerBEmail: accountObj.twoDEmail
+                // });
             }
         })
     }

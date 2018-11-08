@@ -21,9 +21,11 @@ function App() {
 
   const [user, setUser] = useState(null);
 
-  useEffect(() => { auth.onAuthStateChanged((newUser) => { 
-    setUser(newUser)
-  }) }, [auth.onAuthStateChanged])
+  useEffect(() => {
+    auth.onAuthStateChanged((newUser) => {
+      setUser(newUser)
+    })
+  }, [auth.onAuthStateChanged])
 
   const logout = () => {
     console.log('logged out...')
@@ -72,7 +74,7 @@ function App() {
                 />
             )} />
 
-            <Route path="/invite" render={() => (
+            <Route path="/invite/:user" render={() => (
               !user ? (<Route component={(props) =>
                 (<Invite {...props} />)}
               />)

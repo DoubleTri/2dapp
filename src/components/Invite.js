@@ -2,43 +2,42 @@ import React, { useState, useEffect  } from 'react';
 import { db, auth } from '../firebase'
 
 import {  Form, Input, Button, Select, message, Tooltip, Icon, notification, Col, InputNumber, Divider } from 'antd';
+import { accessSync } from 'fs';
 
 const FormItem = Form.Item;
 
 function InviteForm(props) {
 
-const [accountObj, setAccountObj] = useState({ 
-    firstName: null, 
-    lastName: null, 
-    email:null, 
-    password: null,
-    twoDFirstName: null,
-    twoDLastName: null,
-    twoDEmail: null
- }); 
+const [accountObj, setAccountObj] = useState(); 
 
-console.log(Date.now())
+    // db.child("users/" + props.match.params.user).once("value", function (snap) {
+    //     console.log(snap.val())
+    //     props.form.setFieldsValue({
+    //         email: snap.child('twoDEmail').val()
+    //     })
+    // })
+
+    useEffect(() => {
+        db.child("users/" + props.match.params.user).once("value", function (snap) {
+            setAccountObj(snap.val())
+            props.form.setFieldsValue({
+                twoDEmail: snap.child('twoDEmail').val()
+            })            
+        })
+    }, {})
 
     const handleSubmit = (e) => {
+        console.log('submitted')
         e.preventDefault();
         props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(accountObj)
                 props.form.resetFields()
 
-                auth.createUserWithEmailAndPassword(accountObj.email, accountObj.password).catch(function (error) {
+                auth.createUserWithEmailAndPassword(accountObj.twoDEmail, accountObj.password).catch(function (error) {
                     alert(error)
                 });
 
-                const uid =  Date.now();
-
-                db.child('users/' + accountObj.lastName + '-' + uid).set({
-                    firstName: accountObj.firstName, 
-                    lastName: accountObj.lastName,
-                    name: accountObj.firstName + ' ' + accountObj.lastName,  
-                    email: accountObj.email, 
-                    twoDFirstName: accountObj.twoDFirstName,
-                    twoDLastName: accountObj.twoDLastName,
+                db.child('users/' + props.match.params.user).update({
                     twoDEmail: accountObj.twoDEmail
                 });
             }
@@ -67,32 +66,14 @@ const formItemLayout = {
 };
 
   return (
-    <div className="CreateAccount">
-        <h3>Invite</h3>
+      <div className="CreateInvite">
+          <h3>Invite</h3>
 
-          <Form onSubmit={handleSubmit} className="CreateAccountForm">
+          <Form onSubmit={handleSubmit} className="CreateInviteForm">
               <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
 
-              <Divider orientation="left">Your Info</Divider>
-
                   <FormItem>
-                      {getFieldDecorator('firstName', {
-                          rules: [{ required: true, message: 'Please enter your first name' }],
-                      })(
-                          <Input onChange={onChangeText} placeholder="First Name" />
-                          )}
-                  </FormItem>
-
-                  <FormItem>
-                      {getFieldDecorator('lastName', {
-                          rules: [{ required: true, message: 'Please enter your last name' }],
-                      })(
-                          <Input onChange={onChangeText} placeholder="Last Name" />
-                          )}
-                  </FormItem>
-
-                  <FormItem>
-                      {getFieldDecorator('email', {
+                      {getFieldDecorator('twoDEmail', {
                           rules: [{ required: true, message: 'Please enter your email' }],
                       })(
                           <Input onChange={onChangeText} placeholder="Email" type='email' />
@@ -106,44 +87,15 @@ const formItemLayout = {
                           <Input onChange={onChangeText} placeholder="Create a Password" type='password' />
                           )}
                   </FormItem>
-
-                  <Divider orientation="left">Your 2d's Info</Divider>
-
                   <FormItem>
-                      {getFieldDecorator('twoDFirstName', {
-                          rules: [{ required: true, message: "Please enter your 2d's first name" }],
-                      })(
-                          <Input onChange={onChangeText} placeholder="Your 2d's First Name" />
-                          )}
-                  </FormItem>
-
-                  <FormItem>
-                      {getFieldDecorator('twoDLastName', {
-                          rules: [{ required: true, message: "Please enter your 2d's last name" }],
-                      })(
-                          <Input onChange={onChangeText} placeholder="Your 2d's Last Name" />
-                          )}
-                  </FormItem>
-
-                  <FormItem>
-                      {getFieldDecorator('twoDEmail', {
-                          rules: [{ required: true, message: "Please enter your 2d's email" }],
-                      })(
-                          <Input onChange={onChangeText} placeholder="Your 2d's Email" />
-                          )}
-                  </FormItem>
-
-                  <p>Once you've created an account an email will be sent to your 2d asking them to join you on the 2d stat app!</p>
-
-                  <FormItem>
-                      <Button htmlType="submit">Create Account</Button>
+                      <Button htmlType="submit">{accountObj ? "Join " + accountObj.firstName : "loading..."}</Button>
                       <br />
                   </FormItem>
 
               </Col>
           </Form>
 
-    </div>
+      </div>
   );
 }
 
