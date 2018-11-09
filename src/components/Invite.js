@@ -9,18 +9,12 @@ function InviteForm(props) {
 
 const [accountObj, setAccountObj] = useState(); 
 
-    // db.child("users/" + props.match.params.user).once("value", function (snap) {
-    //     console.log(snap.val())
-    //     props.form.setFieldsValue({
-    //         email: snap.child('twoDEmail').val()
-    //     })
-    // })
-
     useEffect(() => {
         db.child("users/" + props.match.params.user).once("value", function (snap) {
             setAccountObj(snap.val())
+            console.log(snap.val())
             props.form.setFieldsValue({
-                twoDEmail: snap.child('twoDEmail').val()
+                partnerBEmail: snap.child('partnerB').child('partnerBEmail').val()
             })            
         })
     }, {})
@@ -36,8 +30,8 @@ const [accountObj, setAccountObj] = useState();
                     alert(error)
                 });
 
-                db.child('users/' + props.match.params.user).update({
-                    twoDEmail: accountObj.twoDEmail
+                db.child('users/' + props.match.params.user).child('partnerB').update({
+                    partnerBEmail: accountObj.twoDEmail
                 });
             }
         })
@@ -87,7 +81,7 @@ const formItemLayout = {
                           )}
                   </FormItem>
                   <FormItem>
-                      <Button htmlType="submit">{accountObj ? "Join " + accountObj.firstName : "loading..."}</Button>
+                      <Button htmlType="submit">{accountObj ? "Join " + accountObj.partnerA.firstName : "loading..."}</Button>
                       <br />
                   </FormItem>
 

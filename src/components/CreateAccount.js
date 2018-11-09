@@ -30,30 +30,30 @@ const [accountObj, setAccountObj] = useState({
 
                 const uid =  accountObj.lastName + '-' + Date.now();
 
-                db.child('users/' +  uid).set({
-                    uid: uid,
-                    firstName: accountObj.firstName, 
-                    lastName: accountObj.lastName,
-                    name: accountObj.firstName + ' ' + accountObj.lastName,  
-                    email: accountObj.email, 
-                    twoDFirstName: accountObj.twoDFirstName,
-                    twoDLastName: accountObj.twoDLastName,
-                    twoDEmail: accountObj.twoDEmail
-                });
-
                 // db.child('users/' +  uid).set({
                 //     uid: uid,
-                //     [accountObj.firstName + ' ' + accountObj.lastName]: {                
-                //         firstName: accountObj.firstName, 
-                //         lastName: accountObj.lastName
-                //     },
-                //     partnerAEmail: accountObj.email,
-                //     [accountObj.twoDFirstName + ' ' + accountObj.twoDLastName]: {
-                //         twoDFirstName: accountObj.twoDFirstName,
-                //         twoDLastName: accountObj.twoDLastName
-                //     }, 
-                //     partnerBEmail: accountObj.twoDEmail
+                //     firstName: accountObj.firstName, 
+                //     lastName: accountObj.lastName,
+                //     name: accountObj.firstName + ' ' + accountObj.lastName,  
+                //     email: accountObj.email, 
+                //     twoDFirstName: accountObj.twoDFirstName,
+                //     twoDLastName: accountObj.twoDLastName,
+                //     twoDEmail: accountObj.twoDEmail
                 // });
+
+                db.child('users/' +  uid).set({
+                    uid: uid,
+                    partnerA: {
+                        partnerAEmail: accountObj.email,                
+                        firstName: accountObj.firstName, 
+                        lastName: accountObj.lastName
+                    },
+                    partnerB: {
+                        partnerBEmail: accountObj.twoDEmail,                
+                        firstName: accountObj.twoDFirstName, 
+                        lastName: accountObj.twoDLastName
+                    },
+                });
             }
         })
     }
