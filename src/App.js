@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
+import { useGlobal } from 'reactn';
 import {
   BrowserRouter as Router,
   Route,
@@ -19,11 +19,16 @@ import Invite from './components/Invite';
 
 function App() {
 
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useGlobal('user')
+  const [loading, setLoading] = useState(true)
+
+  console.log(loading)
+  console.log(user)
 
   useEffect(() => {
     auth.onAuthStateChanged((newUser) => {
       setUser(newUser)
+      setLoading(false)
     })
   }, [auth.onAuthStateChanged])
 
@@ -35,10 +40,9 @@ function App() {
 
   const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route
-      {...rest}
-      render={props =>
+      render={(props) =>
         user ? (
-          <Component {...props} email={user.email}/>
+          <Component/>
         ) : (
             <Redirect
               to={{
@@ -51,7 +55,27 @@ function App() {
     />
   );
 
+  // const RestrictedRoute = ({ component: Component, ...rest }) => (
+  //   <Route
+  //     {...rest}
+  //     render={props =>
+  //       !user ? (
+  //         <Component {...props} />
+  //       ) : (
+  //           <Redirect
+  //             to={{
+  //               pathname: "/",
+  //               state: { from: props.location }
+  //             }}
+  //           />
+  //         )
+  //     }
+  //   />
+  // );
+
     return (
+      loading ? 'loading.....'
+      : 
       <Router>
         <div>
 
@@ -59,9 +83,7 @@ function App() {
           { user? <p onClick={logout}>Log Out</p> : null} 
           <Switch>
 
-            {/* <Route exact path="/create-account" component={CreateAccount} /> */}
-
-            <PrivateRoute exact path="/" component={UserHome} />
+            <PrivateRoute exact path="/" component={UserHome} /> 
 
             <Route path="/create-account" render={() => (
               !user ? (<Route component={(props) =>
@@ -99,6 +121,8 @@ function App() {
           </Switch>
         </div>
       </Router>
+      
+
     );
   }
 

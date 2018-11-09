@@ -1,7 +1,7 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState } from 'react';
 import { db, auth } from '../firebase'
 
-import {  Form, Input, Button, Select, message, Tooltip, Icon, notification, Col, InputNumber, Divider } from 'antd';
+import {  Form, Input, Button, Col, Divider } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -16,8 +16,6 @@ const [accountObj, setAccountObj] = useState({
     twoDLastName: null,
     twoDEmail: null
  }); 
-
-console.log(Date.now())
 
     const handleSubmit = (e) => {
         e.preventDefault();
