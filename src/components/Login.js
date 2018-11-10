@@ -71,7 +71,7 @@ function LoginForm(props) {
             <br />
             <p onClick={() => setShow(true)}>Forgot password</p>
             <p><Link to="/create-account">Create Account </Link></p>
-          </FormItem>
+          </FormItem> 
 
         </Col>
       </Form>

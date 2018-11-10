@@ -1,5 +1,5 @@
 import React, { useState, useEffect  } from 'react';
-import { db, auth } from '../firebase'
+import { db, auth, fireStore } from '../firebase'
 
 import {  Form, Input, Button, Col } from 'antd';
 
@@ -10,12 +10,8 @@ function InviteForm(props) {
 const [accountObj, setAccountObj] = useState(); 
 
     useEffect(() => {
-        db.child("users/" + props.match.params.user).once("value", function (snap) {
-            setAccountObj(snap.val())
-            console.log(snap.val())
-            props.form.setFieldsValue({
-                twoDEmail: snap.child('twoDEmail').val()
-            })            
+        fireStore.collection("users").doc(props.match.params.user).get().then(function(doc) {
+            console.log("Document data:", doc.data());
         })
     }, {})
 

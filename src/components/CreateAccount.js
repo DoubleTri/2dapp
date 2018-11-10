@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGlobal } from 'reactn';
-import { db, auth } from '../firebase'
+import { db, auth, fireStore } from '../firebase'
 
 import {  Form, Input, Button, Col, Divider } from 'antd';
 
@@ -38,19 +38,34 @@ const [accountObj, setAccountObj] = useState({
                         if (uid) {
                             clearInterval(waitForCurrentUser);
 
-                            db.child('users/' + auth.currentUser.uid).set({
-                           
-                                    email: accountObj.email,
-                                    firstName: accountObj.firstName,
-                                    lastName: accountObj.lastName,
-                                    name: accountObj.firstName + ' ' + accountObj.lastName,
-                                    twoDEmail: accountObj.twoDEmail,
-                                    twoDFirstName: accountObj.twoDFirstName,
-                                    twoDLastName: accountObj.twoDLastName,
-                                    twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
-                                    twoDUid: null
-                                
+                            fireStore.collection("users").doc(auth.currentUser.uid).set({
+                                email: accountObj.email,
+                                firstName: accountObj.firstName,
+                                lastName: accountObj.lastName,
+                                name: accountObj.firstName + ' ' + accountObj.lastName,
+                                twoDEmail: accountObj.twoDEmail,
+                                twoDFirstName: accountObj.twoDFirstName,
+                                twoDLastName: accountObj.twoDLastName,
+                                twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
+                                twoDUid: null
+                            })
+                            .catch(function(error) {
+                                console.error("Error adding document: ", error);
                             });
+
+                            // db.child('users/' + auth.currentUser.uid).set({
+                           
+                            //         email: accountObj.email,
+                            //         firstName: accountObj.firstName,
+                            //         lastName: accountObj.lastName,
+                            //         name: accountObj.firstName + ' ' + accountObj.lastName,
+                            //         twoDEmail: accountObj.twoDEmail,
+                            //         twoDFirstName: accountObj.twoDFirstName,
+                            //         twoDLastName: accountObj.twoDLastName,
+                            //         twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
+                            //         twoDUid: null
+                                
+                            //});
                             console.log(auth.currentUser.uid)
                         }
                         else {

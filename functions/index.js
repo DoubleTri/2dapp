@@ -5,10 +5,10 @@ const nodemailer = require('nodemailer');
 
 const emailData = require('./emailData');
 
-exports.invite = functions.database.ref('/users/{newUser}')
-    .onCreate((snap, context) => {
-        console.log("new user " + JSON.stringify(snap.val()))
-        console.log("key " + snap.key)
+exports.inviteEmail = functions.firestore.document('users/{uid}')
+  .onCreate((snap, context) => {
+        console.log("new user " + JSON.stringify(snap.data()))
+        console.log("key " + context.params.uid)
         // console.log( "context", context.params.newUser )
         // return console.log('done ')
 
@@ -16,7 +16,7 @@ exports.invite = functions.database.ref('/users/{newUser}')
         const output = `
           <h2>Test Email</h2>
           <h5>This is an email</h5>
-          <a href="http://localhost:3000/invite/${snap.key}">Invite Link Here</a>
+          <a href="http://localhost:3000/invite/${context.params.uid}">Invite Link Here</a>
           <p>testing testing testing...</p>
         `
       
@@ -35,7 +35,7 @@ exports.invite = functions.database.ref('/users/{newUser}')
       let mailOptions = 
         {
           from: '"2d Application"', // sender address
-          to: snap.child('twoDEmail').val(), // list of receivers
+          to: snap.data().twoDEmail, // list of receivers
           subject: 'NodeMailer Test ',
           html: output // html body
         }
