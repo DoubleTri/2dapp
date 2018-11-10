@@ -14,7 +14,7 @@ const [accountObj, setAccountObj] = useState();
             setAccountObj(snap.val())
             console.log(snap.val())
             props.form.setFieldsValue({
-                partnerBEmail: snap.child('partnerB').child('partnerBEmail').val()
+                twoDEmail: snap.child('twoDEmail').val()
             })            
         })
     }, {})
@@ -27,12 +27,43 @@ const [accountObj, setAccountObj] = useState();
                 props.form.resetFields()
 
                 auth.createUserWithEmailAndPassword(accountObj.twoDEmail, accountObj.password).catch(function (error) {
-                    alert(error)
+                    alert(error.message)
+                }).then(() => {
+                    waitForCurrentUser()
                 });
 
-                db.child('users/' + props.match.params.user).child('partnerB').update({
-                    partnerBEmail: accountObj.twoDEmail
-                });
+                async function waitForCurrentUser() {
+                    try {
+                        let uid = await auth.currentUser.uid;
+                        if (uid) {
+                            clearInterval(waitForCurrentUser);
+
+                            db.child('users/' + auth.currentUser.uid).set({
+                                email: accountObj.twoDEmail,
+                                firstName: accountObj.twoDFirstName,
+                                lastName: accountObj.twoDLastName,
+                                name: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
+                                twoDEmail: accountObj.email,
+                                twoDFirstName: accountObj.firstName,
+                                twoDLastName: accountObj.lastName,
+                                twoDName: accountObj.firstName + ' ' + accountObj.lastName,
+                                twoDUid: props.match.params.user
+                            });
+                            db.child('users/' + props.match.params.user).update({
+                                twoDEmail: accountObj.twoDEmail,
+                                twoDUid: auth.currentUser.uid
+                            })
+                            console.log(auth.currentUser.uid)
+                        }
+                        else {
+                            console.log('Wait for it');
+                        }
+                    }
+                    catch (e) {
+                        console.log(e)
+                    }
+                    //  return userIdIs(uid);//returns promise
+                };
             }
         })
     }
@@ -41,6 +72,7 @@ const onChangeText = (e) => {
     let newAccountObj = Object.assign({}, accountObj);
     newAccountObj[e.target.id] = e.target.value;
     setAccountObj(newAccountObj)
+    console.log(newAccountObj)
 }
 
 const { getFieldDecorator } = props.form;
@@ -81,7 +113,7 @@ const formItemLayout = {
                           )}
                   </FormItem>
                   <FormItem>
-                      <Button htmlType="submit">{accountObj ? "Join " + accountObj.partnerA.firstName : "loading..."}</Button>
+                      <Button htmlType="submit">{accountObj ? "Join " + accountObj.firstName : "loading..."}</Button>
                       <br />
                   </FormItem>
 

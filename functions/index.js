@@ -8,15 +8,15 @@ const emailData = require('./emailData');
 exports.invite = functions.database.ref('/users/{newUser}')
     .onCreate((snap, context) => {
         console.log("new user " + JSON.stringify(snap.val()))
+        console.log("key " + snap.key)
         // console.log( "context", context.params.newUser )
         // return console.log('done ')
 
-        console.log('email address TO: ' + snap.child('partnerB').child('partnerBEmail').val())
         // const emailAddresses = data.recipients
         const output = `
           <h2>Test Email</h2>
           <h5>This is an email</h5>
-          <a href="http://localhost:3000/invite/${snap.child('uid').val()}">Invite Link Here</a>
+          <a href="http://localhost:3000/invite/${snap.key}">Invite Link Here</a>
           <p>testing testing testing...</p>
         `
       
@@ -35,7 +35,7 @@ exports.invite = functions.database.ref('/users/{newUser}')
       let mailOptions = 
         {
           from: '"2d Application"', // sender address
-          to: snap.child('partnerB').child('partnerBEmail').val(), // list of receivers
+          to: snap.child('twoDEmail').val(), // list of receivers
           subject: 'NodeMailer Test ',
           html: output // html body
         }

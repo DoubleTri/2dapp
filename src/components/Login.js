@@ -14,7 +14,6 @@ function LoginForm(props) {
         let newlogInObj = Object.assign({}, logInObj);
         newlogInObj[e.target.id] = e.target.value;
         setLogInObj(newlogInObj)
-        console.log(logInObj)
     }
 
     const handleSubmit = (e) => {

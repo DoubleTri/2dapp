@@ -1,4 +1,5 @@
 import React, { setGlobal } from 'reactn';
+import { auth } from "./firebase";
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
@@ -9,7 +10,9 @@ setGlobal({
     disabled: false,
     initial: 'values',
     x: 1,
-    user: null
+    user: null,
+    uid: null,
+    obj: {one:1,two:2,three:3}
   });
 
 

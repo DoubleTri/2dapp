@@ -20,14 +20,17 @@ import Invite from './components/Invite';
 function App() {
 
   const [user, setUser] = useGlobal('user')
+  const [uid, setUid] = useGlobal('uid') 
   const [loading, setLoading] = useState(true)
 
   console.log(loading)
   console.log(user)
+  console.log(uid)
 
   useEffect(() => {
     auth.onAuthStateChanged((newUser) => {
       setUser(newUser)
+      newUser ? setUid(newUser.uid) : console.log('no user')
       setLoading(false)
     })
   }, [auth.onAuthStateChanged])
@@ -42,7 +45,7 @@ function App() {
     <Route
       render={(props) =>
         user ? (
-          <Component/>
+          <Component />
         ) : (
             <Redirect
               to={{

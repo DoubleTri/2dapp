@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useGlobal } from 'reactn';
 import { db, auth } from '../firebase'
 
 import {  Form, Input, Button, Col, Divider } from 'antd';
@@ -15,45 +16,52 @@ const [accountObj, setAccountObj] = useState({
     twoDFirstName: null,
     twoDLastName: null,
     twoDEmail: null
- }); 
+ });
+ const [uid, setUid] = useGlobal('uid') 
 
     const handleSubmit = (e) => {
         e.preventDefault();
         props.form.validateFields((err, values) => {
             if (!err) {
-                console.log(accountObj)
+
                 props.form.resetFields()
 
                 auth.createUserWithEmailAndPassword(accountObj.email, accountObj.password).catch(function (error) {
-                    alert(error)
+                    alert(error.message)
+                }).then(() => {
+                    waitForCurrentUser()
                 });
 
-                const uid =  accountObj.lastName + '-' + Date.now();
+                async function waitForCurrentUser() {
+                    try {
+                        let uid = await auth.currentUser.uid;
+                        if (uid) {
+                            clearInterval(waitForCurrentUser);
 
-                // db.child('users/' +  uid).set({
-                //     uid: uid,
-                //     firstName: accountObj.firstName, 
-                //     lastName: accountObj.lastName,
-                //     name: accountObj.firstName + ' ' + accountObj.lastName,  
-                //     email: accountObj.email, 
-                //     twoDFirstName: accountObj.twoDFirstName,
-                //     twoDLastName: accountObj.twoDLastName,
-                //     twoDEmail: accountObj.twoDEmail
-                // });
-
-                db.child('users/' +  uid).set({
-                    uid: uid,
-                    partnerA: {
-                        partnerAEmail: accountObj.email,                
-                        firstName: accountObj.firstName, 
-                        lastName: accountObj.lastName
-                    },
-                    partnerB: {
-                        partnerBEmail: accountObj.twoDEmail,                
-                        firstName: accountObj.twoDFirstName, 
-                        lastName: accountObj.twoDLastName
-                    },
-                });
+                            db.child('users/' + auth.currentUser.uid).set({
+                           
+                                    email: accountObj.email,
+                                    firstName: accountObj.firstName,
+                                    lastName: accountObj.lastName,
+                                    name: accountObj.firstName + ' ' + accountObj.lastName,
+                                    twoDEmail: accountObj.twoDEmail,
+                                    twoDFirstName: accountObj.twoDFirstName,
+                                    twoDLastName: accountObj.twoDLastName,
+                                    twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
+                                    twoDUid: null
+                                
+                            });
+                            console.log(auth.currentUser.uid)
+                        }
+                        else {
+                            console.log('Wait for it');
+                        }
+                    }
+                    catch (e) {
+                        console.log(e)
+                    }
+                    //  return userIdIs(uid);//returns promise
+                };
             }
         })
     }

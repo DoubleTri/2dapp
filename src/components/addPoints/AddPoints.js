@@ -7,7 +7,8 @@ const FormItem = Form.Item;
 
 function AddPointsFormForm(props) {
 
-  const [pointObj, setPointObj] = useState(null); 
+  const [pointObj, setPointObj] = useState(null);
+  console.log(props.twoDUid) 
 
 //   useEffect(() => {
 //     db.ref('users').orderByChild('email').equalTo(props.email).once("value", function (snap) {
@@ -21,18 +22,26 @@ function AddPointsFormForm(props) {
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('submitted')
+
+    db.child('users/' + props.twoDUid + '/points').push({
+ 
+        value: pointObj.value,
+        reason: pointObj.reason
+        
+    })
     props.form.resetFields()
 }
 
 const onChangeText = (e) => {
-    console.log(e.target.value)
-    console.log('text changed')
+    let newPointObj = Object.assign({}, pointObj);
+    newPointObj[e.target.id] = e.target.value;
+    setPointObj(newPointObj)
 }
 
 const onChangeSelect = (e) => {
-    console.log(e)
-    console.log('select changed')
+    let newPointObj = Object.assign({}, pointObj);
+    newPointObj.value = e;
+    setPointObj(newPointObj)
 }
 
 const { getFieldDecorator } = props.form;
@@ -66,10 +75,10 @@ const formItemLayout = {
                     </FormItem>
 
                     <FormItem>
-                        {getFieldDecorator('action', {
-                            rules: [{ required: true, message: 'Please enter the action receiving points.' }],
+                        {getFieldDecorator('reason', {
+                            rules: [{ required: true, message: 'Please enter the reason for awarding the points.' }],
                         })(
-                            <Input onChange={onChangeText} placeholder="Action" />
+                            <Input onChange={onChangeText} placeholder="Reason" />
                             )}
                     </FormItem>
                     <FormItem>
