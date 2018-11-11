@@ -12,6 +12,10 @@ const [accountObj, setAccountObj] = useState();
     useEffect(() => {
         fireStore.collection("users").doc(props.match.params.user).get().then(function(doc) {
             console.log("Document data:", doc.data());
+            setAccountObj(doc.data())
+            props.form.setFieldsValue({		             
+                twoDEmail: doc.data().twoDEmail		        
+            }) 
         })
     }, {})
 
@@ -34,7 +38,7 @@ const [accountObj, setAccountObj] = useState();
                         if (uid) {
                             clearInterval(waitForCurrentUser);
 
-                            db.child('users/' + auth.currentUser.uid).set({
+                            fireStore.collection("users").doc(auth.currentUser.uid).set({
                                 email: accountObj.twoDEmail,
                                 firstName: accountObj.twoDFirstName,
                                 lastName: accountObj.twoDLastName,
@@ -43,9 +47,10 @@ const [accountObj, setAccountObj] = useState();
                                 twoDFirstName: accountObj.firstName,
                                 twoDLastName: accountObj.lastName,
                                 twoDName: accountObj.firstName + ' ' + accountObj.lastName,
-                                twoDUid: props.match.params.user
+                                twoDUid: props.match.params.user,
+                                points: []
                             });
-                            db.child('users/' + props.match.params.user).update({
+                            fireStore.collection("users").doc(props.match.params.user).update({
                                 twoDEmail: accountObj.twoDEmail,
                                 twoDUid: auth.currentUser.uid
                             })

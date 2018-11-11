@@ -1,30 +1,51 @@
 import React, { useState, useEffect  } from 'react';
 import { useGlobal } from 'reactn';
-import { db } from '../firebase'
+import { fireStore } from '../firebase'
 
 import AddPoints from './addPoints/AddPoints'
 
 function UserHome(props) {
 
+  console.log('home component')
   const [obj, setObj] = useState(null); 
   const [uid, setUid] = useGlobal('uid')
-  const [user, setUser] = useGlobal('user') 
-
-
 
   useEffect(() => {
-    db.child('users/' + uid).once("value", function (snap) {
-      console.log(snap.val())
-      setObj(snap.val())
-      console.log(user.email)
-      console.log(snap.child('points').val())
-    });
-  }, {});
+    fireStore.collection("users").doc(uid).get().then(function (doc) {
+      //console.log("UserHome data:", doc.data());
+      setObj(doc.data())
+    })
+  }, [uid]);
+
+  let pointTotal = null
+  
+  obj ? obj.points.map((pointObj, i) => {
+    pointTotal = pointTotal + pointObj.value
+  })
+  :
+  pointTotal = "loading..."
 
   return (
     <div className="UserHome">
+    {console.log('home rendered')}
         <h3>User Home</h3>
-        <p>{ obj ? <div>{obj.firstName} loves {obj.twoDFirstName} </div> : 'loading....' }</p>
+      <div>{obj ?
+        <div>
+          {obj.firstName} loves {obj.twoDFirstName}
+          <br />
+     
+          {obj.points.map((pointObj, i) => {
+            return <li key={i}>{pointObj.value + ' ' + pointObj.reason}</li>
+          })}
+
+          <br />
+
+          <div>{pointTotal}</div>
+          
+        </div>
+        
+        : 'loading....'}</div>
+
         { obj ? <AddPoints twoDUid={obj.twoDUid} /> : 'loading....' } 
     </div>
   );

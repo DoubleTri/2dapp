@@ -47,25 +47,12 @@ const [accountObj, setAccountObj] = useState({
                                 twoDFirstName: accountObj.twoDFirstName,
                                 twoDLastName: accountObj.twoDLastName,
                                 twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
-                                twoDUid: null
+                                twoDUid: null,
+                                points: []
                             })
                             .catch(function(error) {
                                 console.error("Error adding document: ", error);
                             });
-
-                            // db.child('users/' + auth.currentUser.uid).set({
-                           
-                            //         email: accountObj.email,
-                            //         firstName: accountObj.firstName,
-                            //         lastName: accountObj.lastName,
-                            //         name: accountObj.firstName + ' ' + accountObj.lastName,
-                            //         twoDEmail: accountObj.twoDEmail,
-                            //         twoDFirstName: accountObj.twoDFirstName,
-                            //         twoDLastName: accountObj.twoDLastName,
-                            //         twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
-                            //         twoDUid: null
-                                
-                            //});
                             console.log(auth.currentUser.uid)
                         }
                         else {

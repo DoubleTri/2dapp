@@ -23,17 +23,17 @@ function App() {
   const [uid, setUid] = useGlobal('uid') 
   const [loading, setLoading] = useState(true)
 
-  console.log(loading)
-  console.log(user)
-  console.log(uid)
+  // console.log(loading)
+  // console.log(user)
+  // console.log(uid)
 
   useEffect(() => {
     auth.onAuthStateChanged((newUser) => {
       setUser(newUser)
-      newUser ? setUid(newUser.uid) : console.log('no user')
+      newUser ? setUid(newUser.uid) && console.log('uid loaded') : console.log('no user')
       setLoading(false)
     })
-  }, [auth.onAuthStateChanged])
+  }, [])
 
   const logout = () => {
     console.log('logged out...')

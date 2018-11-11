@@ -6,13 +6,8 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 setGlobal({
-    cards: [1,2,3,4,5,65],
-    disabled: false,
-    initial: 'values',
-    x: 1,
     user: null,
     uid: null,
-    obj: {one:1,two:2,three:3}
   });
 
 

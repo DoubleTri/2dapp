@@ -1,5 +1,6 @@
 import React, { useState, useEffect  } from 'react';
-import { db } from '../../firebase'
+import { fireStore } from '../../firebase';
+import * as firebase from 'firebase';
 
 import {  Form, Input, Button, Select, message, Tooltip, Icon, notification, Col, InputNumber } from 'antd';
 
@@ -7,28 +8,14 @@ const FormItem = Form.Item;
 
 function AddPointsFormForm(props) {
 
-  const [pointObj, setPointObj] = useState(null);
-  console.log(props.twoDUid) 
-
-//   useEffect(() => {
-//     db.ref('users').orderByChild('email').equalTo(props.email).once("value", function (snap) {
-//       snap.forEach(function (data) {
-//         db.ref('users/' + data.key).once("value", function (snapTwo) {
-//           snap.forEach(function (name) { setObj(snapTwo.val()) })
-//         })
-//       });
-//     });
-//   }, [props.pointObj]);
+const [pointObj, setPointObj] = useState(null);
 
 const handleSubmit = (e) => {
     e.preventDefault();
 
-    db.child('users/' + props.twoDUid + '/points').push({
- 
-        value: pointObj.value,
-        reason: pointObj.reason
-        
-    })
+    fireStore.collection("users").doc(props.twoDUid).update({
+        points: firebase.firestore.FieldValue.arrayUnion({value: pointObj.value, reason: pointObj.reason})
+    });
     props.form.resetFields()
 }
 
