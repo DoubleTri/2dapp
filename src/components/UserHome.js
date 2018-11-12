@@ -1,6 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import { useGlobal } from 'reactn';
-import { fireStore } from '../firebase'
+import { auth, fireStore } from '../firebase'
+import {  Col, Divider  } from 'antd';
 
 import AddPoints from './addPoints/AddPoints'
 
@@ -11,7 +12,7 @@ function UserHome(props) {
   const [uid, setUid] = useGlobal('uid')
 
   useEffect(() => {
-    fireStore.collection("users").doc(uid).get().then(function (doc) {
+    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
       //console.log("UserHome data:", doc.data());
       setObj(doc.data())
     })
@@ -27,26 +28,25 @@ function UserHome(props) {
 
   return (
     <div className="UserHome">
-    {console.log('home rendered')}
-        <h3>User Home</h3>
+    <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
+    <Divider orientation="left">{obj ? obj.firstName + "'s" : null } Recent Points Received</Divider>
       <div>{obj ?
         <div>
-          {obj.firstName} loves {obj.twoDFirstName}
-          <br />
      
           {obj.points.map((pointObj, i) => {
-            return <li key={i}>{pointObj.value + ' ' + pointObj.reason}</li>
+            return <li key={i}><b>{pointObj.value}</b> on {Date.now()} for {pointObj.reason}</li>
           })}
 
           <br />
 
-          <div>{pointTotal}</div>
+          <div>Total Points (week of {Date.now().toString} ) = {pointTotal}</div>
           
         </div>
         
         : 'loading....'}</div>
-
+        <Divider orientation="left">Give Points to {obj ? obj.twoDFirstName : null}</Divider>
         { obj ? <AddPoints twoDUid={obj.twoDUid} /> : 'loading....' } 
+      </Col>
     </div>
   );
 }

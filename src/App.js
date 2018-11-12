@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 
-import { db, auth } from "./firebase";
+import { auth } from "./firebase";
 import './App.scss';
 import 'antd/dist/antd.css'; 
 

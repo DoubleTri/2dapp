@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useGlobal } from 'reactn';
-import { db, auth, fireStore } from '../firebase'
+import { auth, fireStore } from '../firebase'
 
 import {  Form, Input, Button, Col, Divider } from 'antd';
 

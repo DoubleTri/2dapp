@@ -13,6 +13,14 @@ $primary-color: #fcfcfc;
     font-size: calc(10px + 2vmin);
     color: $primary-color;
   }
+
+  ul li {
+    list-style: none;
+  }
+}
+
+.UserHome {
+    background-color: red;
 }
 
 .App-logo {
@@ -34,5 +42,5 @@ $primary-color: #fcfcfc;
 }
 
 ul {
-    list-style-type: none;
+    list-style: none;
 }
