@@ -1,5 +1,4 @@
 import React, { useState, useEffect  } from 'react';
-import { useGlobal } from 'reactn';
 import { auth, fireStore } from '../firebase'
 import {  Col, Divider  } from 'antd';
 
@@ -7,31 +6,32 @@ import AddPoints from './addPoints/AddPoints'
 
 function UserHome(props) {
 
-  console.log('home component')
-  const [obj, setObj] = useState(null); 
-  const [uid, setUid] = useGlobal('uid')
+  const [obj, setObj] = useState(null);
+  const [pointTotal, setPointTotal] = useState(null); 
 
   useEffect(() => {
-    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-      //console.log("UserHome data:", doc.data());
-      setObj(doc.data())
-    })
-  }, [uid]);
+    let pointArr = [];  
 
-  let pointTotal = null
-  
-  obj ? obj.points.map((pointObj, i) => {
-    pointTotal = pointTotal + pointObj.value
-  })
-  :
-  pointTotal = "loading..."
+    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
+      setObj(doc.data())
+
+      doc.data().points.forEach((pointObj, i) => {
+        pointArr.push(pointObj.value);
+        if(i === doc.data().points.length -1){
+          setPointTotal(pointArr.reduce((a, b) => a + b, 0))
+        }
+      })
+    })
+  }, {});
 
   return (
     <div className="UserHome">
+    
     <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
+    {!obj ? 'loading....'
+    :
+    <div> 
     <Divider orientation="left">{obj ? obj.firstName + "'s" : null } Recent Points Received</Divider>
-      <div>{obj ?
-        <div>
      
           {obj.points.map((pointObj, i) => {
             return <li key={i}><b>{pointObj.value}</b> on {Date.now()} for {pointObj.reason}</li>
@@ -39,13 +39,12 @@ function UserHome(props) {
 
           <br />
 
-          <div>Total Points (week of {Date.now().toString} ) = {pointTotal}</div>
+          <div>Total Points (week of) = {pointTotal}</div>
           
-        </div>
-        
-        : 'loading....'}</div>
         <Divider orientation="left">Give Points to {obj ? obj.twoDFirstName : null}</Divider>
-        { obj ? <AddPoints twoDUid={obj.twoDUid} /> : 'loading....' } 
+        <AddPoints twoDUid={obj.twoDUid} />  
+        </div> 
+        }
       </Col>
     </div>
   );
