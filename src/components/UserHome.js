@@ -1,6 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import { useGlobal } from 'reactn';
-import { fireStore } from '../firebase'
+import { auth, fireStore } from '../firebase'
 
 import AddPoints from './addPoints/AddPoints'
 
@@ -11,7 +11,7 @@ function UserHome(props) {
   const [uid, setUid] = useGlobal('uid')
 
   useEffect(() => {
-    fireStore.collection("users").doc(uid).get().then(function (doc) {
+    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
       //console.log("UserHome data:", doc.data());
       setObj(doc.data())
     })
