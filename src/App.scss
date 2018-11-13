@@ -1,4 +1,4 @@
-$primary-color: #fcfcfc;
+$primary-color: #ecdfdf;
 
 .App {
   text-align: center;
@@ -7,6 +7,16 @@ $primary-color: #fcfcfc;
 li {
     list-style: none;
   }
+
+.header{
+    background: red;
+}
+
+// #pointTitleLine {
+// }
+
+// #pointTotalLine {
+// }
 
 .App-logo {
     animation: App-logo-spin infinite 20s linear;

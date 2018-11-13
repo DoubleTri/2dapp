@@ -6,6 +6,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
+import { Layout } from 'antd'
 
 import { auth } from "./firebase";
 import './App.scss';
@@ -76,14 +77,19 @@ function App() {
   //   />
   // );
 
+  const { Header } = Layout;
+
     return (
       loading ? 'loading.....'
       : 
       <Router>
         <div>
-
-          {/* Header will go below */}
-          { user? <p onClick={logout}>Log Out</p> : null} 
+            <Layout>
+              <Header style={{backgroundColor: '#547D8B', textAlign: 'center'}} className="header">
+              <span style={{fontSize: '2.4em'}}>The 2D App</span>{ user? <span style={{float: 'right'}} onClick={logout}>Log Out</span> : null}
+              </Header>
+            </Layout>
+           
           <Switch>
 
             <PrivateRoute exact path="/" component={UserHome} /> 

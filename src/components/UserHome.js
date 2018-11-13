@@ -1,11 +1,7 @@
 import React, { useState, useEffect  } from 'react';
-<<<<<<< HEAD
-import { useGlobal } from 'reactn';
 import { auth, fireStore } from '../firebase'
-=======
-import { auth, fireStore } from '../firebase'
-import {  Col, Divider  } from 'antd';
->>>>>>> ab20c7cd0f9adf1df7153a5eaad605e8b472e6d3
+import {  Col, Divider, Row  } from 'antd';
+import moment from 'moment';
 
 import AddPoints from './addPoints/AddPoints'
 
@@ -15,14 +11,9 @@ function UserHome(props) {
   const [pointTotal, setPointTotal] = useState(null); 
 
   useEffect(() => {
-<<<<<<< HEAD
-    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-      //console.log("UserHome data:", doc.data());
-=======
     let pointArr = [];  
 
     fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
->>>>>>> ab20c7cd0f9adf1df7153a5eaad605e8b472e6d3
       setObj(doc.data())
 
       doc.data().points.forEach((pointObj, i) => {
@@ -36,26 +27,26 @@ function UserHome(props) {
 
   return (
     <div className="UserHome">
-    
-    <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
-    {!obj ? 'loading....'
-    :
-    <div> 
-    <Divider orientation="left">{obj ? obj.firstName + "'s" : null } Recent Points Received</Divider>
-     
-          {obj.points.map((pointObj, i) => {
-            return <li key={i}><b>{pointObj.value}</b> on {Date.now()} for {pointObj.reason}</li>
-          })}
-
-          <br />
-
-          <div>Total Points (week of) = {pointTotal}</div>
-          
-        <Divider orientation="left">Give Points to {obj ? obj.twoDFirstName : null}</Divider>
-        <AddPoints twoDUid={obj.twoDUid} />  
-        </div> 
-        }
-      </Col>
+      {!obj ? 'loading....'
+        :
+        <Row gutter={16}>
+          <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
+            <Divider orientation="left">{obj.firstName + "'s"} Recent Points Received</Divider>
+            <br />
+            <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(obj.weekEnding).calendar()} ) = <b>{pointTotal}</b></div>
+            <br />
+            {obj.points.map((pointObj, i) => {
+              return <li key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
+                <br /> {pointObj.reason} <hr /></li>
+            })}
+        
+          </Col>
+          <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
+            <Divider orientation="left">Give Points to {obj.twoDFirstName}</Divider>
+            <AddPoints twoDUid={obj.twoDUid} />
+          </Col>
+        </Row>
+      }
     </div>
   );
 }

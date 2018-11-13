@@ -14,7 +14,7 @@ const handleSubmit = (e) => {
     e.preventDefault();
 
     fireStore.collection("users").doc(props.twoDUid).update({
-        points: firebase.firestore.FieldValue.arrayUnion({value: pointObj.value, reason: pointObj.reason})
+        points: firebase.firestore.FieldValue.arrayUnion({value: pointObj.value, reason: pointObj.reason, date: Date.now()})
     });
     props.form.resetFields()
 }
