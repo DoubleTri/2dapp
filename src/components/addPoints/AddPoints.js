@@ -2,7 +2,7 @@ import React, { useState, useEffect  } from 'react';
 import { fireStore } from '../../firebase';
 import * as firebase from 'firebase';
 
-import {  Form, Input, Button, Select, message, Tooltip, Icon, notification, Col, InputNumber } from 'antd';
+import {  Form, Input, Button, Col, InputNumber } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -51,7 +51,7 @@ const formItemLayout = {
             <h3>AddPoints</h3>
 
             <Form onSubmit={handleSubmit} className="login-form">
-                <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
+                {/* <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} > */}
 
                     <FormItem>
                         {getFieldDecorator('points', {
@@ -69,11 +69,11 @@ const formItemLayout = {
                             )}
                     </FormItem>
                     <FormItem>
-                        <Button htmlType="submit">Log in</Button>
+                        <Button htmlType="submit">Submit Points</Button>
                         <br />
                     </FormItem>
 
-                </Col>
+                {/* </Col> */}
             </Form>
 
         </div>
