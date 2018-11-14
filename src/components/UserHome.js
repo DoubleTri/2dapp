@@ -11,18 +11,18 @@ function UserHome(props) {
   const [pointTotal, setPointTotal] = useState(null); 
 
   useEffect(() => {
-    let pointArr = [];  
+    // let pointArr = [];  
 
-    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-      setObj(doc.data())
+    // fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
+    //   setObj(doc.data())
 
-      doc.data().points.forEach((pointObj, i) => {
-        pointArr.push(pointObj.value);
-        if(i === doc.data().points.length -1){
-          setPointTotal(pointArr.reduce((a, b) => a + b, 0))
-        }
-      })
-    })
+    //   doc.data().points.forEach((pointObj, i) => {
+    //     pointArr.push(pointObj.value);
+    //     if(i === doc.data().points.length -1){
+    //       setPointTotal(pointArr.reduce((a, b) => a + b, 0))
+    //     }
+    //   })
+    // })
   }, {});
 
   return (

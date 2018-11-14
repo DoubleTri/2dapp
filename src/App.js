@@ -80,7 +80,7 @@ function App() {
   const { Header } = Layout;
 
     return (
-      loading ? 'loading.....'
+      loading ? 'loading.....'  
       : 
       <Router>
         <div>

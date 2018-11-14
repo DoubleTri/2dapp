@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useGlobal } from 'reactn';
 import { auth, fireStore } from '../firebase'
 
-import {  Form, Input, Button, Col, Divider } from 'antd';
+import {  Form, Input, Button, Col, Divider, Select, TimePicker } from 'antd';
+import moment from 'moment';
 
 const FormItem = Form.Item;
 
@@ -15,9 +16,40 @@ const [accountObj, setAccountObj] = useState({
     password: null,
     twoDFirstName: null,
     twoDLastName: null,
-    twoDEmail: null
+    twoDEmail: null,
+    twoDUid: null,
+    points: { weekEnding: null, points: []}
  });
  const [uid, setUid] = useGlobal('uid') 
+
+    useEffect(() => {
+        props.form.setFieldsValue({
+            time: moment('24:00', 'hh:mm a')
+        })
+    }, {}) 
+
+    var date = new Date();
+    var today = date.getDay();
+    var dayPicked = 1;
+    var timePicked;
+    var weekEnding;
+    // var choosenDay = () => {if(dayPicked > today) {
+    //     return (today + 7) - dayPicked
+    //     } else {
+    //         return today - dayPicked
+    //     }
+    // }
+
+    if(dayPicked < today){
+        weekEnding = new Date().setDate(date.getDate() - (today - dayPicked));
+        console.log(moment(weekEnding).toString() + ' Next week ending... ' + moment(new Date().setDate(date.getDate() - (today - dayPicked)) + 604800000).toString())
+        console.log("hours " + weekEnding.getHours())
+    }
+    else{
+        weekEnding = moment(new Date().setDate(date.getDate() - dayPicked));
+        console.log(weekEnding.toString() + ' Next week ending... ' + moment(new Date().setDate(date.getDate() - (today - dayPicked)) + 604800000).toString())
+        console.log("hours " + weekEnding.getHours())
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -48,7 +80,7 @@ const [accountObj, setAccountObj] = useState({
                                 twoDLastName: accountObj.twoDLastName,
                                 twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
                                 twoDUid: null,
-                                points: []
+                                points: { weekEnding: accountObj.points.weekEnding, points: []}
                             })
                             .catch(function(error) {
                                 console.error("Error adding document: ", error);
@@ -72,6 +104,16 @@ const onChangeText = (e) => {
     let newAccountObj = Object.assign({}, accountObj);
     newAccountObj[e.target.id] = e.target.value;
     setAccountObj(newAccountObj)
+}
+
+const onChangeSelect = (e) => {
+    let newAccountObj = Object.assign({}, accountObj);
+    newAccountObj.points.weekEnding = e
+    setAccountObj(newAccountObj)
+}
+
+const onChangeTime = (e) => {
+    console.log(moment(e).toString())
 }
 
 const { getFieldDecorator } = props.form;
@@ -113,6 +155,34 @@ const formItemLayout = {
                           <Input onChange={onChangeText} placeholder="Last Name" />
                           )}
                   </FormItem>
+
+                  <FormItem>
+                      {getFieldDecorator('weekEnding', {
+                          rules: [{ required: true, message: 'Please select when you would like your week to end' }],
+                      })(
+                          <Select
+                              onChange={onChangeSelect}
+                          >
+                              <Select.Option value={0}>Sunday</Select.Option>
+                              <Select.Option value={1}>Monday</Select.Option>
+                              <Select.Option value={2}>Tuesday</Select.Option>
+                              <Select.Option value={3}>Wednesday</Select.Option>
+                              <Select.Option value={4}>Thursday</Select.Option>
+                              <Select.Option value={5}>Friday</Select.Option>
+                              <Select.Option value={6}>Saturday</Select.Option>
+                          </Select>,
+                      )}
+                  </FormItem>
+
+                  <FormItem>
+                      {getFieldDecorator('time', {
+                          rules: [{ required: true, message: 'Please enter your email' }],
+                      })(
+                        <TimePicker use12Hours minuteStep={30} onChange={onChangeTime} format='hh:mm a' />
+                      )}
+                  </FormItem>
+
+                
 
                   <FormItem>
                       {getFieldDecorator('email', {
