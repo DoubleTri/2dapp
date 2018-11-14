@@ -20,7 +20,8 @@ const [accountObj, setAccountObj] = useState({
     twoDUid: null,
     points: { weekEnding: null, points: []}
  });
- const [uid, setUid] = useGlobal('uid') 
+ const [timePicked, setTimePicked] = useState(null) 
+ const [dayPicked, setDayPicked] = useState(null) 
 
     useEffect(() => {
         props.form.setFieldsValue({
@@ -30,25 +31,49 @@ const [accountObj, setAccountObj] = useState({
 
     var date = new Date();
     var today = date.getDay();
-    var dayPicked = 1;
-    var timePicked;
-    var weekEnding;
-    // var choosenDay = () => {if(dayPicked > today) {
-    //     return (today + 7) - dayPicked
-    //     } else {
-    //         return today - dayPicked
-    //     }
-    // }
 
-    if(dayPicked < today){
+    var year;
+    var month;
+    var day;
+    var hour;
+    var minute;
+
+    var mili;
+
+    var weekEnding;
+
+    if(dayPicked <= today){
+       
         weekEnding = new Date().setDate(date.getDate() - (today - dayPicked));
-        console.log(moment(weekEnding).toString() + ' Next week ending... ' + moment(new Date().setDate(date.getDate() - (today - dayPicked)) + 604800000).toString())
-        console.log("hours " + weekEnding.getHours())
+        //console.log("before " + moment(weekEnding).toString())
+        //console.log('week ending.... ' + new Date(weekEnding).toString())
+        //console.log(moment(weekEnding).toString() + ' Next week ending... ' + moment(new Date().setDate(date.getDate() - (today - dayPicked)) + 604800000).toString())
+        year = new Date(weekEnding).getYear() + 1900;
+        month = new Date(weekEnding).getMonth();
+        day = new Date(weekEnding).getDate();
+        hour = new Date(timePicked).getHours();
+        minute = new Date(timePicked).getMinutes();
+        mili = Date.parse(new Date(year, month, day, hour, minute))
+        //console.log(hour, minute)
+        console.log('final ' + moment(mili).toString() + ' Next week ending... ' + moment(mili + 604800000).toString())
+        if(moment(mili) > date){
+            console.log('stats due today')
+        }else{
+            console.log('stats due in 7 days')
+        }
     }
     else{
-        weekEnding = moment(new Date().setDate(date.getDate() - dayPicked));
-        console.log(weekEnding.toString() + ' Next week ending... ' + moment(new Date().setDate(date.getDate() - (today - dayPicked)) + 604800000).toString())
-        console.log("hours " + weekEnding.getHours())
+        weekEnding = moment(new Date().setDate( (date.getDate() -7) + (dayPicked - today) ));
+        //console.log("after " + moment(weekEnding).toString())
+        //console.log(weekEnding.toString() + ' Next week ending... ' + moment(new Date().setDate(date.getDate() - (today - dayPicked)) + 604800000).toString())
+        year = new Date(weekEnding).getYear() + 1900;
+        month = new Date(weekEnding).getMonth();
+        day = new Date(weekEnding).getDate();
+        hour = new Date(timePicked).getHours();
+        minute = new Date(timePicked).getMinutes();
+        mili = Date.parse(new Date(year, month, day, hour, minute))
+        //console.log(hour, minute)
+        console.log('final ' + moment(mili).toString() + ' Next week ending... ' + moment(mili + 604800000).toString())
     };
 
     const handleSubmit = (e) => {
@@ -110,10 +135,12 @@ const onChangeSelect = (e) => {
     let newAccountObj = Object.assign({}, accountObj);
     newAccountObj.points.weekEnding = e
     setAccountObj(newAccountObj)
+    setDayPicked(e)
 }
 
 const onChangeTime = (e) => {
     console.log(moment(e).toString())
+    setTimePicked(e)
 }
 
 const { getFieldDecorator } = props.form;
