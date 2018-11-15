@@ -48,7 +48,7 @@ const [accountObj, setAccountObj] = useState();
                                 twoDLastName: accountObj.lastName,
                                 twoDName: accountObj.firstName + ' ' + accountObj.lastName,
                                 twoDUid: props.match.params.user,
-                                points: []
+                                points: { weekEnding: accountObj.points.weekEnding, pointTotal: 0, points: []}
                             });
                             fireStore.collection("users").doc(props.match.params.user).update({
                                 twoDEmail: accountObj.twoDEmail,

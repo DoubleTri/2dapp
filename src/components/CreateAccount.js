@@ -28,8 +28,6 @@ const [accountObj, setAccountObj] = useState({
             time: moment('24:00', 'hh:mm a')
         })
     }, {})
-    
-    console.log(Date.now() + 300000)
 
     var date = new Date();
     var today = date.getDay();
@@ -121,7 +119,7 @@ const [accountObj, setAccountObj] = useState({
                                 twoDLastName: accountObj.twoDLastName,
                                 twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
                                 twoDUid: null,
-                                points: { weekEnding: accountObj.points.weekEnding, points: []}
+                                points: { weekEnding: accountObj.points.weekEnding, pointTotal: 0, points: []}
                             })
                             .catch(function(error) {
                                 console.error("Error adding document: ", error);
@@ -155,7 +153,7 @@ const onChangeSelect = (e) => {
 }
 
 const onChangeTime = (e) => {
-    console.log(moment(e).toString())
+    // console.log(moment(e).toString())
     setTimePicked(e)
 }
 
