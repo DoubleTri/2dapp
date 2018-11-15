@@ -1,53 +1,62 @@
 import React, { useState, useEffect  } from 'react';
 import { auth, fireStore } from '../firebase'
-import {  Col, Divider, Row  } from 'antd';
-import moment from 'moment';
+import {  Col, Divider  } from 'antd';
 
 import AddPoints from './addPoints/AddPoints'
+import UsersPoints from './usersPoints/UsersPoints'
+import Graph from './graph/Graph'
 
 function UserHome(props) {
 
   const [obj, setObj] = useState(null);
-  const [pointTotal, setPointTotal] = useState(null); 
+  const [selected, setSelected] = useState(null)
 
   useEffect(() => {
-    let pointArr = [];  
-
     fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
       setObj(doc.data())
-
-      // doc.data().points.forEach((pointObj, i) => {
-      //   pointArr.push(pointObj.value);
-      //   if(i === doc.data().points.length -1){
-      //     setPointTotal(pointArr.reduce((a, b) => a + b, 0))
-      //   }
-      // })
     })
   }, {});
 
   console.log(obj)
 
+  const usersPoints = () => {
+    setSelected('usersPoints')
+  }
+
+  const addPoints = () => {
+    setSelected('addPoints')
+  }
+
+  const graph = () => {
+    setSelected('graph')
+  }
+
+  let renderedThing = () => {
+    if (selected === 'addPoints') {
+      return <AddPoints twoDUid={obj.twoDUid} />
+    } else if (selected === 'graph') {
+      return <Graph obj={obj} />
+    } else {
+      return <UsersPoints obj={obj} />
+    }
+  }
+
+  const style = {margin: '25px'}
+
   return (
     <div className="UserHome">
       {!obj ? 'loading....'
         :
-        <Row gutter={16}>
-          <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
-            <Divider orientation="left">{obj.firstName + "'s"} Recent Points Received</Divider>
-            <br />
-            <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(obj.points.weekEnding).calendar()} ) = <b>{pointTotal}</b></div>
-            <br />
-            {obj.points.points.map((pointObj, i) => {
-              return <li key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
-                <br /> {pointObj.reason} <hr /></li>
-            })}
-          </Col>
+        <Col xs={{ span: 20, offset: 2 }} sm={{ span: 16, offset: 4 }} style={{ marginTop: '5em' }} >
 
-          <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} >
-            <Divider orientation="left">Give Points to {obj.twoDFirstName}</Divider>
-            <AddPoints twoDUid={obj.twoDUid} />
-          </Col>
-        </Row>
+          <Divider orientation="left">
+            <span style={style} onClick={usersPoints}>{obj.firstName}'s Points</span>
+            <span style={style} onClick={addPoints}>Give {obj.twoDFirstName} Points</span>
+            <span style={style} onClick={graph}>See Graph</span></Divider>
+
+          {renderedThing()}
+
+        </Col>
       }
     </div>
   );
