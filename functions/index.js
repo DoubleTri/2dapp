@@ -2,6 +2,8 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 
 const nodemailer = require('nodemailer');
+const moment = require('moment');
+var CronJob = require('cron').CronJob
 
 const emailData = require('./emailData');
 
@@ -48,3 +50,23 @@ exports.inviteEmail = functions.firestore.document('users/{uid}')
         return;
     });
 
+//-------------------------------------------------------------------------------------------
+
+let weekEnding;
+
+const caluculateStat = () => {
+  console.log('calculateStat fired! Next calculation is on ' +  (Date.now() + 600000))
+}
+
+exports.stats = functions.firestore.document('users/{uid}')
+  .onCreate((snap, context) => {
+    // console.log("weekEnding " + snap.data().points.weekEnding + ' ' + moment(new Date(snap.data().points.weekEnding)).toString)
+    weekEnding = Date.now() + 300000
+    console.log("first " + (Date.now() + 300000))
+
+    let job = new CronJob('0 */10 * * * *', () => {
+      caluculateStat()
+    });
+
+    return job.start();
+  })

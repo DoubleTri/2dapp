@@ -27,7 +27,9 @@ const [accountObj, setAccountObj] = useState({
         props.form.setFieldsValue({
             time: moment('24:00', 'hh:mm a')
         })
-    }, {}) 
+    }, {})
+    
+    console.log(Date.now() + 300000)
 
     var date = new Date();
     var today = date.getDay();
@@ -42,6 +44,7 @@ const [accountObj, setAccountObj] = useState({
 
     var weekEnding;
 
+    useEffect(() => {
     if(dayPicked <= today){
        
         weekEnding = new Date().setDate(date.getDate() - (today - dayPicked));
@@ -56,10 +59,17 @@ const [accountObj, setAccountObj] = useState({
         mili = Date.parse(new Date(year, month, day, hour, minute))
         //console.log(hour, minute)
         console.log('final ' + moment(mili).toString() + ' Next week ending... ' + moment(mili + 604800000).toString())
+
         if(moment(mili) > date){
             console.log('stats due today')
+            let newAccountObj = Object.assign({}, accountObj);
+            newAccountObj.points.weekEnding = mili 
+            setAccountObj(newAccountObj)
         }else{
             console.log('stats due in 7 days')
+            let newAccountObj = Object.assign({}, accountObj);
+            newAccountObj.points.weekEnding = mili + 604800000
+            setAccountObj(newAccountObj)
         }
     }
     else{
@@ -73,8 +83,14 @@ const [accountObj, setAccountObj] = useState({
         minute = new Date(timePicked).getMinutes();
         mili = Date.parse(new Date(year, month, day, hour, minute))
         //console.log(hour, minute)
+        
+        let newAccountObj = Object.assign({}, accountObj);
+        newAccountObj.points.weekEnding = mili + 604800000
+        setAccountObj(newAccountObj)
+
         console.log('final ' + moment(mili).toString() + ' Next week ending... ' + moment(mili + 604800000).toString())
     };
+}, [timePicked])
 
     const handleSubmit = (e) => {
         e.preventDefault();
