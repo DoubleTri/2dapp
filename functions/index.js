@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+admin.initializeApp(functions.config().firebase);
 
 const nodemailer = require('nodemailer');
 const moment = require('moment');
@@ -41,30 +42,52 @@ exports.inviteEmail = functions.firestore.document('users/{uid}')
           subject: 'NodeMailer Test ',
           html: output // html body
         }
-          transporter.sendMail(mailOptions, (error, info) => {
+        transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 return console.log(error);
             }
             return console.log('success ' + JSON.stringify(info))
         });
-        return;
-    });
+        return true;
+    })
 
 //-------------------------------------------------------------------------------------------
 
-const caluculateStat = () => {
-  console.log('calculateStat fired! Next calculation is on ' +  (Date.now() + 120000))
+let scheduler = (item) => {
+  cron.schedule('*/2 * * * *', () => {
+    //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
+    console.log('working...' + item)
+    change(item)
+  })
+}
+
+let change = (item) => {admin.firestore().collection('users').doc(item).update({
+  test: 'test test test ' + new Date()
+}).then(() => {
+  return console.log('update successful')
+}).catch((error) => {
+  return console.log(error)
+})
 }
 
 exports.stats = functions.firestore.document('users/{uid}')
   .onCreate((snap, context) => {
-    console.log("weekEnding " + snap.data().points.weekEnding + ' ' + moment(new Date(snap.data().points.weekEnding)).toString)
+    const key = context.params.uid
 
+    console.log('starting!!! peramssssssss' )
+    change(context.params.uid)
+
+    cron.schedule('*/2 * * * *', () => {
+      //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
+      console.log('working...' + context.params.uid)
+      change(context.params.uid)
+    })
+    
+
+    // console.log("weekEnding " + snap.data().points.weekEnding + ' ' + moment(new Date(snap.data().points.weekEnding)).toString)
     // every 3 days '0 0 */3 * *'
     // every 10 minutes '0 */10 * * * *'
-
-    // cron.schedule('*/2 * * * *', () => {
-    //   caluculateStat();
-    // });
-    return;
+    // '00 30 11 * * 1-5' - Runs every weekday (Monday through Friday) at 11:30:00 AM. It does not run on Saturday or Sunday.
+    return true;
   })
+
