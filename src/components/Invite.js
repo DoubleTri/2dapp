@@ -37,7 +37,7 @@ const [accountObj, setAccountObj] = useState();
                         let uid = await auth.currentUser.uid;
                         if (uid) {
                             clearInterval(waitForCurrentUser);
-
+                            
                             fireStore.collection("users").doc(auth.currentUser.uid).set({
                                 email: accountObj.twoDEmail,
                                 firstName: accountObj.twoDFirstName,

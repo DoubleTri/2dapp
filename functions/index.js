@@ -1,5 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
+const firebase = require('firebase');
 admin.initializeApp(functions.config().firebase);
 
 const nodemailer = require('nodemailer');
@@ -61,22 +62,32 @@ let scheduler = (item) => {
   })
 }
 
-let change = (item) => {admin.firestore().collection('users').doc(item).update({
-  test: 'test test test ' + new Date()
-}).then(() => {
-  return console.log('update successful')
-}).catch((error) => {
-  return console.log(error)
-})
+let change = (item) => {
+
+  const db = admin.firestore().collection('users').doc(item)
+  let value = 0;
+
+  db.get().then((doc) => {   
+    console.log( JSON.stringify(doc.data()))
+    return value = doc.data().points.pointTotal;
+  }).then(() => {
+    console.log('update successful ');
+    return db.update({
+      testTwo: 'done ' + value + new Date(),
+      'points.pointTotal': 0
+    })
+  }).catch((error) => {
+    return console.log(error)
+  })
 }
 
 exports.stats = functions.firestore.document('users/{uid}')
   .onCreate((snap, context) => {
     const key = context.params.uid
 
-    console.log('starting!!! peramssssssss' )
+    console.log('starting!!! new... firebase.......values POIMTS ' )
     change(context.params.uid)
-
+    
     cron.schedule('*/2 * * * *', () => {
       //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
       console.log('working...' + context.params.uid)
