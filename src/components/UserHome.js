@@ -11,10 +11,24 @@ function UserHome(props) {
   const [obj, setObj] = useState(null);
   const [selected, setSelected] = useState(null)
 
+  var citiesRef = fireStore.collection("users");
+
   useEffect(() => {
-    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-      setObj(doc.data())
-    })
+    citiesRef.where("uids", "array-contains", auth.currentUser.uid).get().then(snap => {
+      snap.docs.forEach(doc => {
+        console.log(doc.id, doc.data())
+      })
+  }).catch(function(error) {
+      console.log("Error getting document:", error);
+  });
+    // let user = auth.currentUser.uid.toString();
+    // console.log(user)
+    // fireStore.collection('users').where('test', '==', 'test two').get().then((doc) => {
+    //   console.log(doc.data())
+    // })
+    // fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
+    //   setObj(doc.data())
+    // })
   }, {});
 
   console.log(obj)
