@@ -85,14 +85,15 @@ exports.stats = functions.firestore.document('users/{uid}')
   .onCreate((snap, context) => {
     const key = context.params.uid
 
-    console.log('starting!!! new... firebase.......values POIMTS ' )
-    change(context.params.uid)
+    console.log('starting' )
+
+    // change(context.params.uid)
     
-    cron.schedule('*/2 * * * *', () => {
-      //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
-      console.log('working...' + context.params.uid)
-      change(context.params.uid)
-    })
+    // cron.schedule('*/2 * * * *', () => {
+    //   //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
+    //   console.log('working...' + context.params.uid)
+    //   change(context.params.uid)
+    // })
     
 
     // console.log("weekEnding " + snap.data().points.weekEnding + ' ' + moment(new Date(snap.data().points.weekEnding)).toString)

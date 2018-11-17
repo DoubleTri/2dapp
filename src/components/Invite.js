@@ -1,5 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import { db, auth, fireStore } from '../firebase'
+import * as firebase from 'firebase';
 
 import {  Form, Input, Button, Col } from 'antd';
 
@@ -37,24 +38,42 @@ const [accountObj, setAccountObj] = useState();
                         let uid = await auth.currentUser.uid;
                         if (uid) {
                             clearInterval(waitForCurrentUser);
-                            
-                            fireStore.collection("users").doc(auth.currentUser.uid).set({
-                                email: accountObj.twoDEmail,
-                                firstName: accountObj.twoDFirstName,
-                                lastName: accountObj.twoDLastName,
-                                name: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
-                                twoDEmail: accountObj.email,
-                                twoDFirstName: accountObj.firstName,
-                                twoDLastName: accountObj.lastName,
-                                twoDName: accountObj.firstName + ' ' + accountObj.lastName,
-                                twoDUid: props.match.params.user,
-                                points: { weekEnding: accountObj.points.weekEnding, pointTotal: 0, points: []}
-                            });
+
                             fireStore.collection("users").doc(props.match.params.user).update({
-                                twoDEmail: accountObj.twoDEmail,
-                                twoDUid: auth.currentUser.uid
+                                uids: firebase.firestore.FieldValue.arrayUnion(uid),
+                                twoDEmail: firebase.firestore.FieldValue.delete(),
+                                twoDFirstName: firebase.firestore.FieldValue.delete(),
+                                twoDLastName: firebase.firestore.FieldValue.delete(),
+                                [uid]: {
+                                    email: accountObj.twoDEmail,
+                                    firstName: accountObj.twoDFirstName,
+                                    lastName: accountObj.twoDLastName,
+                                    points:{
+                                        weekEnding: null,
+                                        pointTotal: 0, 
+                                        points: []
+                                    }
+                                } 
+
+
+                                // email: accountObj.twoDEmail,
+                                // firstName: accountObj.twoDFirstName,
+                                // lastName: accountObj.twoDLastName,
+                                // name: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
+                                // twoDEmail: accountObj.email,
+                                // twoDFirstName: accountObj.firstName,
+                                // twoDLastName: accountObj.lastName,
+                                // twoDName: accountObj.firstName + ' ' + accountObj.lastName,
+                                // twoDUid: props.match.params.user,
+                                // points: { weekEnding: accountObj.points.weekEnding, pointTotal: 0, points: []}
+                            }).then(() => {
+                                console.log('test')
                             })
-                            console.log(auth.currentUser.uid)
+                            // fireStore.collection("users").doc(props.match.params.user).update({
+                            //     twoDEmail: accountObj.twoDEmail,
+                            //     twoDUid: auth.currentUser.uid
+                            // })
+                            // console.log(auth.currentUser.uid)
                         }
                         else {
                             console.log('Wait for it');

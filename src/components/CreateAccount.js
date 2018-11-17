@@ -109,17 +109,33 @@ const [accountObj, setAccountObj] = useState({
                         if (uid) {
                             clearInterval(waitForCurrentUser);
 
-                            fireStore.collection("users").doc(auth.currentUser.uid).set({
-                                email: accountObj.email,
-                                firstName: accountObj.firstName,
-                                lastName: accountObj.lastName,
-                                name: accountObj.firstName + ' ' + accountObj.lastName,
+                            fireStore.collection("users").doc().set({
+                                uids: [uid],
+                                weekEnding: accountObj.points.weekEnding,
                                 twoDEmail: accountObj.twoDEmail,
                                 twoDFirstName: accountObj.twoDFirstName,
                                 twoDLastName: accountObj.twoDLastName,
-                                twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
-                                twoDUid: null,
-                                points: { weekEnding: accountObj.points.weekEnding, pointTotal: 0, points: []}
+                                [uid]: {
+                                    email: accountObj.email,
+                                    firstName: accountObj.firstName,
+                                    lastName: accountObj.lastName,
+                                    points:{
+                                        weekEnding: accountObj.points.weekEnding,
+                                        pointTotal: 0, 
+                                        points: []
+                                    }
+                                } 
+
+                                // email: accountObj.email,
+                                // firstName: accountObj.firstName,
+                                // lastName: accountObj.lastName,
+                                // name: accountObj.firstName + ' ' + accountObj.lastName,
+                                // twoDEmail: accountObj.twoDEmail,
+                                // twoDFirstName: accountObj.twoDFirstName,
+                                // twoDLastName: accountObj.twoDLastName,
+                                // twoDName: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
+                                // twoDUid: null,
+                                // points: { weekEnding: accountObj.points.weekEnding, pointTotal: 0, points: []}
                             })
                             .catch(function(error) {
                                 console.error("Error adding document: ", error);
