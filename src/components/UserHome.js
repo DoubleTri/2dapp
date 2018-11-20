@@ -5,15 +5,18 @@ import {  Col, Divider  } from 'antd';
 import AddPoints from './addPoints/AddPoints'
 import UsersPoints from './usersPoints/UsersPoints'
 import Graph from './graph/Graph'
+import Waiting from './waiting/Waiting'
 
 function UserHome(props) {
 
   const [obj, setObj] = useState(null);
   const [selected, setSelected] = useState(null)
 
-  useEffect(() => {
-    fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-      setObj(doc.data())
+  useEffect(async () => {
+    await fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).get().then(snap => {
+      snap.docs.forEach(doc => {
+        setObj(doc.data())
+      })
     })
   }, {});
 
@@ -32,12 +35,16 @@ function UserHome(props) {
   }
 
   let renderedThing = () => {
-    if (selected === 'addPoints') {
+    if (obj.uids.length = 1) {
+      return <Waiting />
+    } else if (selected === 'addPoints') {
       return <AddPoints twoDUid={obj.twoDUid} />
     } else if (selected === 'graph') {
       return <Graph obj={obj} />
-    } else {
+    } else if (selected === 'usersPoings') {
       return <UsersPoints obj={obj} />
+    } else {
+      return 'loading....'
     }
   }
 

@@ -54,13 +54,13 @@ exports.inviteEmail = functions.firestore.document('users/{uid}')
 
 //-------------------------------------------------------------------------------------------
 
-let scheduler = (item) => {
-  cron.schedule('*/2 * * * *', () => {
-    //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
-    console.log('working...' + item)
-    change(item)
-  })
-}
+// let scheduler = (item) => {
+//   cron.schedule('*/2 * * * *', () => {
+//     //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
+//     console.log('working...' + item)
+//     change(item)
+//   })
+// }
 
 let change = (item) => {
 
