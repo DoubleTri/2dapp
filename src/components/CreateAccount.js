@@ -115,7 +115,8 @@ const [accountObj, setAccountObj] = useState({
                                 twoDEmail: accountObj.twoDEmail,
                                 twoDFirstName: accountObj.twoDFirstName,
                                 twoDLastName: accountObj.twoDLastName,
-                                [uid]: {
+                                partnerA: {
+                                    uid: uid,
                                     email: accountObj.email,
                                     firstName: accountObj.firstName,
                                     lastName: accountObj.lastName,

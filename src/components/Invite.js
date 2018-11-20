@@ -44,7 +44,7 @@ const [accountObj, setAccountObj] = useState();
                                 twoDEmail: firebase.firestore.FieldValue.delete(),
                                 twoDFirstName: firebase.firestore.FieldValue.delete(),
                                 twoDLastName: firebase.firestore.FieldValue.delete(),
-                                [uid]: {
+                                partnerB: {
                                     email: accountObj.twoDEmail,
                                     firstName: accountObj.twoDFirstName,
                                     lastName: accountObj.twoDLastName,
@@ -53,7 +53,7 @@ const [accountObj, setAccountObj] = useState();
                                         pointTotal: 0, 
                                         points: []
                                     }
-                                } 
+                                }
 
 
                                 // email: accountObj.twoDEmail,
@@ -133,7 +133,7 @@ const formItemLayout = {
                           )}
                   </FormItem>
                   <FormItem>
-                      <Button htmlType="submit">{accountObj ? "Join " + accountObj.firstName : "loading..."}</Button>
+                      <Button htmlType="submit">{accountObj ? "Join " + accountObj.partnerA.firstName : "loading..."}</Button>
                       <br />
                   </FormItem>
 
