@@ -17,7 +17,6 @@ import UserHome from './components/UserHome';
 import CreateAccount from './components/CreateAccount';
 import Invite from './components/Invite';
 
-
 function App() {
 
   const [user, setUser] = useGlobal('user')

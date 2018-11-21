@@ -3,18 +3,16 @@ import moment from 'moment';
 
 function UsersPoints(props) {
 
-  const [currentUserObj, setCurrentUserObj] = useState(props.currentUserObj);
+  const [currentUserObj, setCurrentUserObj] = useState(null);
 
-  // useEffect(() => {
-  //   fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-  //     setObj(doc.data())
-  //   })
-  // }, {});
+  useEffect(() => {
+    setCurrentUserObj(props.currentUserObj)
+  }, [props.currentUserObj])
 
   return (
     <div className="UsersPoints">
-      {!currentUserObj ? 'loading....'
-        :<div>
+    {currentUserObj ? 
+        <div>
             <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(currentUserObj.points.weekEnding).calendar()} ) = <b>{currentUserObj.points.pointTotal}</b></div>
             <br />
             {currentUserObj.points.points.map((pointObj, i) => {
@@ -22,7 +20,7 @@ function UsersPoints(props) {
                 <br /> {pointObj.reason} <hr /></li>
             })}
             </div>
-      }
+    : 'LOADING....'}
     </div>
   );
 }
