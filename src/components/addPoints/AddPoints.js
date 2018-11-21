@@ -9,20 +9,28 @@ const FormItem = Form.Item;
 function AddPointsFormForm(props) {
 
 const [pointObj, setPointObj] = useState(null);
-const [pointTotal, setPointTotal] = useState(null)
+const [pointTotal, setPointTotal] = useState(null);
+const [twoDObj, setTwoDObj] = useState(props.twoDObj)
 
 const handleSubmit = (e) => {
     e.preventDefault();
 
-    let db = fireStore.collection("users").doc(props.twoDUid);
+    let db = fireStore.collection("users").doc(props.id);
     let pointTotal;
 
-    db.get().then(function (doc) {
-        pointTotal = doc.data().points.pointTotal + pointObj.value
+    console.log(db)
+
+    db.get().then(doc => {
+        pointTotal = doc.data().partnerA.points.pointTotal + pointObj.value
+        console.log(doc.data().partnerA.points.pointTotal)
     }).then(() => {
         db.update({
+            
+            partnerA:{
             'points.points': firebase.firestore.FieldValue.arrayUnion({ value: pointObj.value, reason: pointObj.reason, date: Date.now() }),
             'points.pointTotal': pointTotal
+        }
+        
         })
     })
         

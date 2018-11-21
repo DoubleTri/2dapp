@@ -5,33 +5,35 @@ import {  Col, Divider  } from 'antd';
 import AddPoints from './addPoints/AddPoints'
 import UsersPoints from './usersPoints/UsersPoints'
 import Graph from './graph/Graph'
+import Waiting from './waiting/Waiting'
 
 function UserHome(props) {
 
   const [obj, setObj] = useState(null);
+  const [id, setId] = useState(null)
+  const [currentUserObj, setCurrentUserObj] = useState(null)
+  const [twoDObj, setTwoDObj] = useState(null)
   const [selected, setSelected] = useState(null)
 
-  var citiesRef = fireStore.collection("users");
+  useEffect(async() => {
+    await fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).get().then(snap => {
+      let doc = snap.docs[0].data()
 
-  useEffect(() => {
-    citiesRef.where("uids", "array-contains", auth.currentUser.uid).get().then(snap => {
-      snap.docs.forEach(doc => {
-        console.log(doc.id, doc.data())
+      if(snap.docs[0].data().uids.length === 1) {setSelected('waiting')} else {setSelected('usersPoints')}
+
+        setObj(doc)
+        setId(snap.docs[0].id)
+  
+        if (doc.partnerA.uid === auth.currentUser.uid){
+          setCurrentUserObj(doc.partnerA);
+          setTwoDObj(doc.partnerB);
+        }else{
+          setCurrentUserObj(doc.partnerB);
+          setTwoDObj(doc.partnerA);
+        }
+
       })
-  }).catch(function(error) {
-      console.log("Error getting document:", error);
-  });
-    // let user = auth.currentUser.uid.toString();
-    // console.log(user)
-    // fireStore.collection('users').where('test', '==', 'test two').get().then((doc) => {
-    //   console.log(doc.data())
-    // })
-    // fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-    //   setObj(doc.data())
-    // })
   }, {});
-
-  console.log(obj)
 
   const usersPoints = () => {
     setSelected('usersPoints')
@@ -46,12 +48,14 @@ function UserHome(props) {
   }
 
   let renderedThing = () => {
-    if (selected === 'addPoints') {
-      return <AddPoints twoDUid={obj.twoDUid} />
+    if (selected === 'waiting') {
+      return <Waiting />
+    } else if (selected === 'addPoints') {
+      return <AddPoints twoDObj={twoDObj} id={id}/>
     } else if (selected === 'graph') {
-      return <Graph obj={obj} />
-    } else {
-      return <UsersPoints obj={obj} />
+      return <Graph currentUserObj={currentUserObj} twoDObj={twoDObj} />
+    } else if (selected === 'usersPoints') {
+      return <UsersPoints currentUserObj={currentUserObj} />
     }
   }
 
@@ -59,18 +63,24 @@ function UserHome(props) {
 
   return (
     <div className="UserHome">
-      {!obj ? 'loading....'
-        :
+      {obj ? 
         <Col xs={{ span: 20, offset: 2 }} sm={{ span: 16, offset: 4 }} style={{ marginTop: '5em' }} >
 
+        {twoDObj && currentUserObj ? 
+        <div>
           <Divider orientation="left">
-            <span style={style} onClick={usersPoints}>{obj.firstName}'s Points</span>
-            <span style={style} onClick={addPoints}>Give {obj.twoDFirstName} Points</span>
+            <span style={style} onClick={usersPoints}>{currentUserObj.firstName}'s Points</span>
+            <span style={style} onClick={addPoints}>Give {twoDObj.firstName} Points</span>
             <span style={style} onClick={graph}>See Graph</span></Divider>
+            </div> 
+            : 
+            null}
 
           {renderedThing()}
 
         </Col>
+        :
+        'Loading....'
       }
     </div>
   );
