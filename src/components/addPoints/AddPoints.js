@@ -1,6 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import { fireStore } from '../../firebase';
 import * as firebase from 'firebase';
+import moment from 'moment';
 
 import {  Form, Input, Button, Col, InputNumber } from 'antd';
 
@@ -12,26 +13,28 @@ const [pointObj, setPointObj] = useState(null);
 const [pointTotal, setPointTotal] = useState(null);
 const [twoDObj, setTwoDObj] = useState(props.twoDObj)
 
+//let partner = props.partner
+
 const handleSubmit = (e) => {
     e.preventDefault();
 
     let db = fireStore.collection("users").doc(props.id);
     let pointTotal;
 
-    console.log(db)
+    db.get().then(doc => {      
+        pointTotal = doc.data()[props.partner].points.pointTotal + pointObj.value
+    })
+    
+    .then(() => {
+        var newPointTotal = props.partner + ".points.pointTotal";
+        var pointTotalObj = {};
+        pointTotalObj[newPointTotal] = pointTotal;
+        db.update(pointTotalObj);
 
-    db.get().then(doc => {
-        pointTotal = doc.data().partnerA.points.pointTotal + pointObj.value
-        console.log(doc.data().partnerA.points.pointTotal)
-    }).then(() => {
-        db.update({
-            
-            partnerA:{
-            'points.points': firebase.firestore.FieldValue.arrayUnion({ value: pointObj.value, reason: pointObj.reason, date: Date.now() }),
-            'points.pointTotal': pointTotal
-        }
-        
-        })
+        var newPoints = props.partner + ".points.points";
+        var newPointsObj = {};
+        newPointsObj[newPoints] = firebase.firestore.FieldValue.arrayUnion({ value: pointObj.value, reason: pointObj.reason, date: Date.now() })
+        db.update(newPointsObj);
     })
         
     props.form.resetFields()
@@ -50,26 +53,12 @@ const onChangeSelect = (e) => {
 }
 
 const { getFieldDecorator } = props.form;
-const { size } = props;
-const { TextArea } = Input;
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 8 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 10 },
-  },
-};
 
     return (
         <div className="AddPoints">
             <h3>AddPoints</h3>
 
             <Form onSubmit={handleSubmit} className="login-form">
-                {/* <Col xs={{ span: 20, offset: 2 }} sm={{ span: 12, offset: 6 }} style={{ marginTop: '5em' }} > */}
 
                     <FormItem>
                         {getFieldDecorator('points', {
@@ -91,9 +80,18 @@ const formItemLayout = {
                         <br />
                     </FormItem>
 
-                {/* </Col> */}
             </Form>
-
+            {twoDObj ? 
+            <div>
+                <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(props.weekEnding).calendar()} ) = <b>{twoDObj.points.pointTotal}</b></div>
+                <br />
+                {twoDObj.points.points.map((pointObj, i) => {
+                    return <li key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
+                        <br /> {pointObj.reason} <hr /></li>
+                })}
+            </div>
+            : "Loading..." }
+    
         </div>
     );
 }

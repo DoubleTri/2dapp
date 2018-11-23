@@ -12,27 +12,37 @@ function UserHome(props) {
   const [obj, setObj] = useState(null);
   const [id, setId] = useState(null)
   const [currentUserObj, setCurrentUserObj] = useState(null)
+  const [partner, setPartner] = useState(null)
   const [twoDObj, setTwoDObj] = useState(null)
   const [selected, setSelected] = useState(null)
 
-  useEffect(async() => {
-    await fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).get().then(snap => {
-      let doc = snap.docs[0].data()
+  useEffect(() => {
+    fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).onSnapshot({
+      // Listen for document metadata changes
+      includeMetadataChanges: true
+  }, thisDocument => {
+      let doc = thisDocument.docs[0].data()
 
-      if(snap.docs[0].data().uids.length === 1) {setSelected('waiting')} else {setSelected('usersPoints')}
+      if (doc.uids.length === 1) {
+        setSelected('waiting')
+      } else {
+        setSelected('usersPoints')
+      }
 
         setObj(doc)
-        setId(snap.docs[0].id)
-  
+        setId(thisDocument.docs[0].id)
         if (doc.partnerA.uid === auth.currentUser.uid){
           setCurrentUserObj(doc.partnerA);
           setTwoDObj(doc.partnerB);
+          setPartner('partnerB');
         }else{
           setCurrentUserObj(doc.partnerB);
           setTwoDObj(doc.partnerA);
+          setPartner('partnerA');
         }
+  });
+    
 
-      })
   }, {});
 
   const usersPoints = () => {
@@ -51,11 +61,11 @@ function UserHome(props) {
     if (selected === 'waiting') {
       return <Waiting />
     } else if (selected === 'addPoints') {
-      return <AddPoints twoDObj={twoDObj} id={id}/>
+      return <AddPoints twoDObj={twoDObj} id={id} partner={partner}/>
     } else if (selected === 'graph') {
       return <Graph currentUserObj={currentUserObj} twoDObj={twoDObj} />
     } else if (selected === 'usersPoints') {
-      return <UsersPoints currentUserObj={currentUserObj} />
+      return <UsersPoints currentUserObj={currentUserObj} weekEnding={obj.weekEnding}/>
     }
   }
 
