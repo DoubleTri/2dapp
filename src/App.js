@@ -38,7 +38,8 @@ function App() {
   const logout = () => {
     console.log('logged out...')
     auth.signOut();
-    setUser(null)
+    setUser(null);
+    return <Redirect to="/login"/>
   }
 
   const PrivateRoute = ({ component: Component, ...rest }) => (

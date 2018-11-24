@@ -1,5 +1,5 @@
 import React, { useState, useEffect  } from 'react';
-import { fireStore } from '../../firebase';
+import { auth, fireStore } from '../../firebase';
 import * as firebase from 'firebase';
 import moment from 'moment';
 
@@ -11,9 +11,22 @@ function AddPointsFormForm(props) {
 
 const [pointObj, setPointObj] = useState(null);
 const [pointTotal, setPointTotal] = useState(null);
-const [twoDObj, setTwoDObj] = useState(props.twoDObj)
+const [twoDObj, setTwoDObj] = useState(null)
 
-//let partner = props.partner
+    useEffect(() => {
+        fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).onSnapshot({
+            // Listen for document metadata changes
+            includeMetadataChanges: false
+        }, thisDocument => {
+            let doc = thisDocument.docs[0].data()
+            if (doc.partnerA.uid !== auth.currentUser.uid) {
+                setTwoDObj(doc.partnerA)
+            } else {
+                setTwoDObj(doc.partnerB)
+            }
+        })
+    }, [props.twoDObj]);
+
 
 const handleSubmit = (e) => {
     e.preventDefault();
@@ -86,7 +99,7 @@ const { getFieldDecorator } = props.form;
                 <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(props.weekEnding).calendar()} ) = <b>{twoDObj.points.pointTotal}</b></div>
                 <br />
                 {twoDObj.points.points.map((pointObj, i) => {
-                    return <li key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
+                    return <li className='pointEvent' key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
                         <br /> {pointObj.reason} <hr /></li>
                 })}
             </div>

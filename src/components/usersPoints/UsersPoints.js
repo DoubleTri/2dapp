@@ -16,7 +16,7 @@ function UsersPoints(props) {
             <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(props.weekEnding).calendar()} ) = <b>{currentUserObj.points.pointTotal}</b></div>
             <br />
             {currentUserObj.points.points.map((pointObj, i) => {
-              return <li key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
+              return <li className='pointEvent' key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
                 <br /> {pointObj.reason} <hr /></li>
             })}
             </div>
