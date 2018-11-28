@@ -48,8 +48,8 @@ const [accountObj, setAccountObj] = useState();
                                     email: accountObj.twoDEmail,
                                     firstName: accountObj.twoDFirstName,
                                     lastName: accountObj.twoDLastName,
+                                    pastPoints: [],
                                     points:{
-                                        weekEnding: null,
                                         pointTotal: 0, 
                                         points: []
                                     }
@@ -92,7 +92,6 @@ const onChangeText = (e) => {
     let newAccountObj = Object.assign({}, accountObj);
     newAccountObj[e.target.id] = e.target.value;
     setAccountObj(newAccountObj)
-    console.log(newAccountObj)
 }
 
 const { getFieldDecorator } = props.form;

@@ -120,8 +120,8 @@ const [accountObj, setAccountObj] = useState({
                                     email: accountObj.email,
                                     firstName: accountObj.firstName,
                                     lastName: accountObj.lastName,
+                                    pastPoints: [],
                                     points:{
-                                        weekEnding: accountObj.points.weekEnding,
                                         pointTotal: 0, 
                                         points: []
                                     }

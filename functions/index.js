@@ -65,17 +65,28 @@ exports.inviteEmail = functions.firestore.document('users/{uid}')
 let change = (item) => {
 
   const db = admin.firestore().collection('users').doc(item)
-  let value = 0;
+  let ready = false;
 
   db.get().then((doc) => {   
-    console.log( JSON.stringify(doc.data()))
-    return value = doc.data().points.pointTotal;
+    console.log('starting step one... ' + JSON.stringify(doc.data()))
+
+    if (doc.data().uids.length === 1) {
+      console.log('waiting for partner')
+    }else{
+      db.update({
+        'partnerA.pastPoints': doc.data().partnerA.pastPoints.concat({ [doc.data().weekEnding]: { pointTotal: doc.data().partnerA.points.pointTotal, points: doc.data().partnerA.points.points } }),
+        'partnerA.points': {
+          pointTotal: 0,
+          points: []
+        },
+        weekEnding: doc.data().weekEnding + 50020
+      })
+    }
+  // firebase.firestore.FieldValue.arrayUnion({ [doc.data().weekEnding]: {pointTotal : doc.data().partnerA.points.pointTotal, points: doc.data().partnerA.points.points } })
+    return true
   }).then(() => {
     console.log('update successful ');
-    return db.update({
-      testTwo: 'done ' + value + new Date(),
-      'points.pointTotal': 0
-    })
+    return true
   }).catch((error) => {
     return console.log(error)
   })
@@ -85,15 +96,14 @@ exports.stats = functions.firestore.document('users/{uid}')
   .onCreate((snap, context) => {
     const key = context.params.uid
 
-    console.log('starting' )
-
-    // change(context.params.uid)
+    console.log('starting!!!!!! 666666 6666666 ' )
+    let uid = context.params.uid 
+    change(uid)
     
-    // cron.schedule('*/2 * * * *', () => {
-    //   //console.log("FireStore data retrived " + JSON.stringify(snap.data()))
-    //   console.log('working...' + context.params.uid)
-    //   change(context.params.uid)
-    // })
+    cron.schedule('*/2 * * * *', () => {
+      console.log('working...' + uid)
+      change(uid)
+    })
     
 
     // console.log("weekEnding " + snap.data().points.weekEnding + ' ' + moment(new Date(snap.data().points.weekEnding)).toString)
