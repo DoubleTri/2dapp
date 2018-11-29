@@ -25,7 +25,7 @@ const [twoDObj, setTwoDObj] = useState(null)
                 setTwoDObj(doc.partnerB)
             }
         })
-    }, [props.twoDObj]);
+    }, {});
 
 
 const handleSubmit = (e) => {
