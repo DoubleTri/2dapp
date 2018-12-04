@@ -16,7 +16,7 @@ function Graph(props) {
   currentUserObj.pastPoints.forEach(obj => {
     let date = Number(Object.keys(obj))
     dbData.push({
-      x: moment(new Date(date)).format('h:mm:ss').toString(),
+      x: moment(new Date(date)).format('MMM Do').toString(),
       y: Object.values(obj)[0].pointTotal,
       id: Object.values(obj)[0].points 
     })

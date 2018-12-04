@@ -17,7 +17,7 @@ function UserHome(props) {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
-    fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).get().then(snap => {
+    fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).get().then((snap) => {
       let doc = snap.docs[0].data()
 
       if(snap.docs[0].data().uids.length === 1) {setSelected('waiting')} else {setSelected('usersPoints')}

@@ -23,10 +23,6 @@ function App() {
   const [uid, setUid] = useGlobal('uid') 
   const [loading, setLoading] = useState(true)
 
-  // console.log(loading)
-  // console.log(user)
-  // console.log(uid)
-
   useEffect(() => {
     auth.onAuthStateChanged((newUser) => {
       setUser(newUser)

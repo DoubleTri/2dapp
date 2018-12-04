@@ -54,26 +54,11 @@ const [accountObj, setAccountObj] = useState();
                                         points: []
                                     }
                                 }
-
-
-                                // email: accountObj.twoDEmail,
-                                // firstName: accountObj.twoDFirstName,
-                                // lastName: accountObj.twoDLastName,
-                                // name: accountObj.twoDFirstName + ' ' + accountObj.twoDLastName,
-                                // twoDEmail: accountObj.email,
-                                // twoDFirstName: accountObj.firstName,
-                                // twoDLastName: accountObj.lastName,
-                                // twoDName: accountObj.firstName + ' ' + accountObj.lastName,
-                                // twoDUid: props.match.params.user,
-                                // points: { weekEnding: accountObj.points.weekEnding, pointTotal: 0, points: []}
-                            }).then(() => {
-                                console.log('test')
                             })
-                            // fireStore.collection("users").doc(props.match.params.user).update({
-                            //     twoDEmail: accountObj.twoDEmail,
-                            //     twoDUid: auth.currentUser.uid
-                            // })
-                            // console.log(auth.currentUser.uid)
+                            .catch(function(error) {
+                                console.error("Error adding document: ", error);
+                            });
+                            console.log(auth.currentUser.uid)
                         }
                         else {
                             console.log('Wait for it');
@@ -82,7 +67,6 @@ const [accountObj, setAccountObj] = useState();
                     catch (e) {
                         console.log(e)
                     }
-                    //  return userIdIs(uid);//returns promise
                 };
             }
         })
