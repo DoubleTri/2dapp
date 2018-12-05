@@ -20,6 +20,7 @@ exports.inviteEmail = functions.firestore.document('users/{uid}')
         const output = `
           <h2>Test Email</h2>
           <h5>This is an email</h5>
+          ${snap.data().partnerA.firstName} has sent you an invitation. 
           <a href="http://localhost:3000/invite/${context.params.uid}">Invite Link Here</a>
           <p>testing testing testing...</p>
         `

@@ -16,7 +16,7 @@ function Waiting(props) {
   return (
     <div className="Waiting">
 
-    <h3>This is the Waiting section</h3>
+    <h3>Waiting for {props.twoD}</h3>
 
     </div>
   );

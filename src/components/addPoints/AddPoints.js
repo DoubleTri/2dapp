@@ -3,7 +3,7 @@ import { auth, fireStore } from '../../firebase';
 import * as firebase from 'firebase';
 import moment from 'moment';
 
-import {  Form, Input, Button, Col, InputNumber } from 'antd';
+import {  Form, Input, Button, Col, InputNumber, Icon } from 'antd';
 
 const FormItem = Form.Item;
 
@@ -96,7 +96,10 @@ const { getFieldDecorator } = props.form;
             </Form>
             {twoDObj ? 
             <div>
-                <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(props.weekEnding).calendar()} ) = <b>{twoDObj.points.pointTotal}</b></div>
+                <div id="pointTotalLine"><b>Total Points</b> (week ending {moment(new Date(props.weekEnding - 500)).format('MMMM Do [ at midnight]').toString()}) = <b>{twoDObj.points.pointTotal}</b>
+                {twoDObj.pastPoints.length !== 0 && twoDObj.points.pointTotal !== 0 && twoDObj.points.pointTotal > Object.values(twoDObj.pastPoints[twoDObj.pastPoints.length -1])[0].pointTotal ? <span><Icon type="heart" /> upstat! </span> : ' downstat'}
+                </div>
+                {twoDObj.pastPoints.length !== 0 ? <div>{twoDObj.firstName}'s total last week = {Object.values(twoDObj.pastPoints[twoDObj.pastPoints.length -1])[0].pointTotal}</div> : null }
                 <br />
                 {twoDObj.points.points.map((pointObj, i) => {
                     return <li className='pointEvent' key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>

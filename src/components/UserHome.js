@@ -1,6 +1,7 @@
 import React, { useState, useEffect  } from 'react';
 import { auth, fireStore } from '../firebase'
 import {  Col, Divider  } from 'antd';
+import Loader from 'react-loader-spinner'
 
 import AddPoints from './addPoints/AddPoints'
 import UsersPoints from './usersPoints/UsersPoints'
@@ -17,25 +18,35 @@ function UserHome(props) {
   const [selected, setSelected] = useState(null)
 
   useEffect(() => {
-    fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).get().then((snap) => {
-      let doc = snap.docs[0].data()
+    // App.js updates user info much fasten then the DB.  
+    // Thus when a second user signed up for the first time via the invite page the program would crash becase a user was there but there was no doc in the DB yet.  
+    // My solution was to put the .get() function in an if statement...
+    // If doc, run function. Else wait 2.5 seconds and try again.  
+    let dbCheck = () => {
+      fireStore.collection("users").where('uids', 'array-contains', auth.currentUser.uid).get().then((snap) => {
+        if (snap.docs.length === 0) {
+          setTimeout(function () { dbCheck() }, 2500);
+        } else {
+          let doc = snap.docs[0].data()
 
-      if(snap.docs[0].data().uids.length === 1) {setSelected('waiting')} else {setSelected('usersPoints')}
+          if (doc.uids.length === 1) { setSelected('waiting') } else { setSelected('usersPoints') }
 
-        setObj(doc)
-        setId(snap.docs[0].id)
-  
-        if (doc.partnerA.uid === auth.currentUser.uid){
-          setCurrentUserObj(doc.partnerA);
-          setTwoDObj(doc.partnerB);
-          setPartner('partnerB');
-        }else{
-          setCurrentUserObj(doc.partnerB);
-          setTwoDObj(doc.partnerA);
-          setPartner('partnerA');
+          setObj(doc)
+          setId(snap.docs[0].id) 
+
+          if (doc.partnerA.uid === auth.currentUser.uid) {
+            setCurrentUserObj(doc.partnerA);
+            setTwoDObj(doc.partnerB);
+            setPartner('partnerB');
+          } else {
+            setCurrentUserObj(doc.partnerB);
+            setTwoDObj(doc.partnerA);
+            setPartner('partnerA');
+          }
         }
-
       })
+    }
+    dbCheck()
   }, {});
 
   const usersPoints = () => {
@@ -52,9 +63,9 @@ function UserHome(props) {
 
   let renderedThing = () => {
     if (selected === 'waiting') {
-      return <Waiting />
+      return <Waiting twoD={obj.twoDFirstName} />
     } else if (selected === 'addPoints') {
-      return <AddPoints twoDObj={twoDObj} id={id} partner={partner}/>
+      return <AddPoints twoDObj={twoDObj} id={id} partner={partner}  weekEnding={obj.weekEnding}/>
     } else if (selected === 'graph') {
       return <Graph currentUserObj={currentUserObj} twoDObj={twoDObj} />
     } else if (selected === 'usersPoints') {
@@ -75,15 +86,18 @@ function UserHome(props) {
             <span style={style} onClick={usersPoints}>{currentUserObj.firstName}'s Points</span>
             <span style={style} onClick={addPoints}>Give {twoDObj.firstName} Points</span>
             <span style={style} onClick={graph}>See Graph</span></Divider>
-            </div> 
-            : 
+            </div>
+            :
             null}
 
           {renderedThing()}
 
         </Col>
         :
-        'Loading....'
+        <div className='heartLoader' ><Loader
+        type="Hearts"
+        color="red"
+        width="300" /></div>
       }
     </div>
   );

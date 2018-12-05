@@ -1,2 +1,10 @@
 Clean Up <Waiting /> in UserHome
 Add realtime to UserHome sub components
+Create invite email with correct url
+Replce 'loading...' with spinner on app.js
+Clean up files
+Add 'last weeks total' to usersPoints
+Write rules
+Create new email account for invitations
+Fix graph size
+Graph set number of past weeks 
