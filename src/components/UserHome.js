@@ -73,7 +73,8 @@ function UserHome(props) {
     }
   }
 
-  const style = {margin: '25px'}
+  const on = {margin: '25px', textDecoration: 'underline', fontSize: '110%'}
+  const off = {margin: '25px', color: 'gray'}
 
   return (
     <div className="UserHome">
@@ -83,9 +84,9 @@ function UserHome(props) {
         {twoDObj && currentUserObj ? 
         <div>
           <Divider orientation="left">
-            <span style={style} onClick={usersPoints}>{currentUserObj.firstName}'s Points</span>
-            <span style={style} onClick={addPoints}>Give {twoDObj.firstName} Points</span>
-            <span style={style} onClick={graph}>See Graph</span></Divider>
+            <span style={ selected === 'usersPoints' ? on : off } onClick={usersPoints}>{currentUserObj.firstName}'s Points</span>
+            <span style={ selected === 'addPoints' ? on : off } onClick={addPoints}>Give {twoDObj.firstName} Points</span>
+            <span style={ selected === 'graph' ? on : off } onClick={graph}>See Graph</span></Divider>
             </div>
             :
             null}
