@@ -9,3 +9,4 @@ Create new email account for invitations
 Fix graph size
 Graph set number of past weeks 
 Add selected to text on userHome
+User edit name and info
