@@ -7,7 +7,7 @@ import {
   Redirect,
 } from "react-router-dom";
 import { Layout } from 'antd'
-import Loader from 'react-loader-spinner'
+
 
 import { auth } from "./firebase";
 import './App.scss';
@@ -17,6 +17,7 @@ import Login from './components/Login';
 import UserHome from './components/UserHome';
 import CreateAccount from './components/CreateAccount';
 import Invite from './components/Invite';
+import Spinner from './components/Spinner'
 
 function App() {
 
@@ -77,13 +78,7 @@ function App() {
   const { Header } = Layout;
 
     return (
-      loading ? <div className='heartLoader' >
-      <Loader
-        type="Hearts"
-        color="red"
-        width="300" />
-        <div className='loaderText'>The 2D App</div>
-        </div>
+      loading ? <Spinner />
       : 
       <Router>
         <div>

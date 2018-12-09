@@ -7,6 +7,7 @@ import AddPoints from './addPoints/AddPoints'
 import UsersPoints from './usersPoints/UsersPoints'
 import Graph from './graph/Graph'
 import Waiting from './waiting/Waiting'
+import Spinner from './Spinner'
 
 function UserHome(props) {
 
@@ -95,10 +96,7 @@ function UserHome(props) {
 
         </Col>
         :
-        <div className='heartLoader' ><Loader
-        type="Hearts"
-        color="red"
-        width="300" /></div>
+          <Spinner />
       }
     </div>
   );

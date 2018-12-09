@@ -1,12 +1,14 @@
-Clean Up <Waiting /> in UserHome
-Add realtime to UserHome sub components
+DONE!!  Add 'last weeks total' to usersPoints
+DONE!!  Add selected to text on userHome
+DONE!!  Replce 'loading...' with spinner on app.js
+
 Create invite email with correct url
-Replce 'loading...' with spinner on app.js
-Clean up files
-Add 'last weeks total' to usersPoints
-Write rules
 Create new email account for invitations
-Fix graph size
-Graph set number of past weeks 
-Add selected to text on userHome
+Clean Up <Waiting /> in UserHome
+Fix graph size 
+
+Clean up files
+Write rules
+Graph set number of past weeks
 User edit name and info
+Add realtime to UserHome sub components

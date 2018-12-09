@@ -1,6 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import moment from 'moment';
-import Loader from 'react-loader-spinner'
+import Spinner from '../Spinner';
 
 function UsersPoints(props) {
 
@@ -22,10 +22,7 @@ function UsersPoints(props) {
                 <br /> {pointObj.reason} <hr /></li>
           })}
         </div>
-        : <div className='heartLoader' ><Loader
-          type="Hearts"
-          color="red"
-          width="300" /></div>}
+        : null}
     </div>
   );
 }
