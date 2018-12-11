@@ -11,7 +11,7 @@ import { Layout } from 'antd'
 
 import { auth } from "./firebase";
 import './App.scss';
-import 'antd/dist/antd.css'; 
+//import 'antd/dist/antd.css'; 
 
 import Login from './components/Login';
 import UserHome from './components/UserHome';
@@ -84,7 +84,7 @@ function App() {
         <div>
             <Layout>
               <Header style={{backgroundColor: '#547D8B', textAlign: 'center'}} className="header">
-              <span style={{fontSize: '2.4em'}}>The 2D App</span>{ user? <span style={{float: 'right'}} onClick={logout}>Log Out</span> : null}
+              <span style={{fontSize: '2.4em'}}><b>Two D Stats</b></span>{ user? <span style={{float: 'right'}} onClick={logout}>Log Out</span> : null}
               </Header>
             </Layout>
            

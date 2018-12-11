@@ -18,11 +18,12 @@ exports.inviteEmail = functions.firestore.document('users/{uid}')
 
         // const emailAddresses = data.recipients
         const output = `
-          <h2>Test Email</h2>
-          <h5>This is an email</h5>
-          ${snap.data().partnerA.firstName} has sent you an invitation. 
-          <a href="http://localhost:3000/invite/${context.params.uid}">Invite Link Here</a>
-          <p>testing testing testing...</p>
+          <h5>Welcome to Two-D Stats!</h5>
+          <h3>${snap.data().partnerA.firstName} has created an account on twoDstats.com and would like you to join as well.</h3>
+          <p>Why???</p>
+          <p>A major component of building and maintaining a successful 2d is discovering what your partner needs and wants. TwoDstats.com is here to help with the discovery.</p>
+          <p>Click the link below to start you stats!</p>
+          <a href="http://twodstats.com/invite/${context.params.uid}">Join ${snap.data().partnerA.firstName} on twoDstats.com</a>
         `
       
         let transporter = nodemailer.createTransport({

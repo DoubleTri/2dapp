@@ -11,6 +11,18 @@ function Graph(props) {
   const [twoDObj, setTwoDObj] = useState(props.twoDObj)
   const [weekEnding, setWeekEnding] = useState(null) 
   const [pastWeek, setPastWeek] = useState(null)
+  const [width, setWidth] = useState(window.innerWidth)
+
+  useEffect(() => {
+    let handleResize = () => {
+      setWidth(window.innerWidth)
+      console.log(width)
+    }
+    window.addEventListener('resize', handleResize)
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  })
 
   var dbData = []
 
@@ -25,6 +37,8 @@ function Graph(props) {
 
   let data = [dbData];
 
+  let height = 300
+  let graphWidth = width/2
 
   return (
     <div className="graph">
@@ -44,23 +58,22 @@ function Graph(props) {
      
      
   
-<Col m={{ span: 20, offset: 2 }} xl={{ span: 12 }}>
-{/* <Col sm={20} md={10} > */}
+<Col span={20} offset={2} >
+<div style={{  display: 'table', margin: '0 auto'}} >
       <LineChart
         axes
         dataPoints
         grid
         xType={'text'}
         clickHandler={(d) => `${setPastWeek(d.id)} ${setWeekEnding(d.x)}`}
-        width={450}
-        height={300}
-        //interpolate={'cardinal'}
+        width={graphWidth}
+        height={height}
         data={data}
       />
+      </div>
   </Col>
 
-<Col m={{ span: 20, offset: 2 }} xl={{ span: 12 }} style={{paddingLeft: '50px'}}>
-{/* <Col sm={20} md={10} > */}
+<Col span={20} offset={2} >
       <div>{!weekEnding ? null : <div style={{ marginBottom: '10px'}}><b>{weekEnding}</b></div>}</div>
 
       <div>{!pastWeek ? null :

@@ -5,18 +5,10 @@ function Waiting(props) {
 
   const [obj, setObj] = useState(props.obj);
 
-  // useEffect(() => {
-  //   fireStore.collection("users").doc(auth.currentUser.uid).get().then(function (doc) {
-  //     setObj(doc.data())
-  //   })
-  // }, {});
-
-  //console.log(obj)
-
   return (
     <div className="Waiting">
 
-    <h3>Waiting for {props.twoD}</h3>
+    <h3>Waiting for {props.twoD} to create an account.</h3>
 
     </div>
   );

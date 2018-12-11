@@ -1,7 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import { auth, fireStore } from '../firebase'
-import {  Col, Divider  } from 'antd';
-import Loader from 'react-loader-spinner'
+import {  Col, Divider, Menu, Icon  } from 'antd';
 
 import AddPoints from './addPoints/AddPoints'
 import UsersPoints from './usersPoints/UsersPoints'
@@ -50,16 +49,9 @@ function UserHome(props) {
     dbCheck()
   }, {});
 
-  const usersPoints = () => {
-    setSelected('usersPoints')
-  }
-
-  const addPoints = () => {
-    setSelected('addPoints')
-  }
-
-  const graph = () => {
-    setSelected('graph')
+  let handleClick = (key) => {
+    setSelected(key.key)
+    console.log(key)
   }
 
   let renderedThing = () => {
@@ -74,8 +66,12 @@ function UserHome(props) {
     }
   }
 
-  const on = {margin: '25px', textDecoration: 'underline', fontSize: '110%'}
-  const off = {margin: '25px', color: 'gray'}
+  let off = {
+    color: 'red',
+  }
+  let on = {
+    color: 'green',
+  }
 
   return (
     <div className="UserHome">
@@ -83,11 +79,27 @@ function UserHome(props) {
         <Col xs={{ span: 20, offset: 2 }} sm={{ span: 16, offset: 4 }} style={{ marginTop: '5em' }} >
 
         {twoDObj && currentUserObj ? 
-        <div>
-          <Divider orientation="left">
-            <span style={ selected === 'usersPoints' ? on : off } onClick={usersPoints}>{currentUserObj.firstName}'s Points</span>
-            <span style={ selected === 'addPoints' ? on : off } onClick={addPoints}>Give {twoDObj.firstName} Points</span>
-            <span style={ selected === 'graph' ? on : off } onClick={graph}>See Graph</span></Divider>
+            <div>
+              <Menu
+                className='userMenu'
+                onClick={handleClick}
+                selectedKeys={[selected]}
+                mode="horizontal"
+              >
+
+                <Menu.Item key="usersPoints" style={selected === 'usersPoints' ? off : on}>
+                  <Icon type="user" />{currentUserObj.firstName}'s Points
+                </Menu.Item>
+
+                <Menu.Item key="addPoints">
+                  <Icon type="heart" />Give {twoDObj.firstName} Points
+                </Menu.Item>
+
+                <Menu.Item key="graph">
+                  <Icon type="line-chart" />Graphs
+                </Menu.Item>
+
+              </Menu>
             </div>
             :
             null}

@@ -1,14 +1,17 @@
 DONE!!  Add 'last weeks total' to usersPoints
 DONE!!  Add selected to text on userHome
 DONE!!  Replce 'loading...' with spinner on app.js
+DONE!!  Fix graph size
 
 Create invite email with correct url
 Create new email account for invitations
 Clean Up <Waiting /> in UserHome
-Fix graph size 
+Fix userHome menu
 
 Clean up files
 Write rules
 Graph set number of past weeks
 User edit name and info
 Add realtime to UserHome sub components
+Home screen icon
+See past points by values
