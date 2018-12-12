@@ -12,7 +12,6 @@ const [accountObj, setAccountObj] = useState();
 
     useEffect(() => {
         fireStore.collection("users").doc(props.match.params.user).get().then(function(doc) {
-            console.log("Document data:", doc.data());
             setAccountObj(doc.data())
             props.form.setFieldsValue({		             
                 twoDEmail: doc.data().twoDEmail		        

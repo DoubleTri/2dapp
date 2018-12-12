@@ -1,6 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import { auth, fireStore } from '../firebase'
-import {  Col, Divider, Menu, Icon  } from 'antd';
+import {  Col, Menu, Icon  } from 'antd';
 
 import AddPoints from './addPoints/AddPoints'
 import UsersPoints from './usersPoints/UsersPoints'
@@ -51,7 +51,6 @@ function UserHome(props) {
 
   let handleClick = (key) => {
     setSelected(key.key)
-    console.log(key)
   }
 
   let renderedThing = () => {
@@ -64,13 +63,6 @@ function UserHome(props) {
     } else if (selected === 'usersPoints') {
       return <UsersPoints currentUserObj={currentUserObj} weekEnding={obj.weekEnding}/>
     }
-  }
-
-  let off = {
-    color: 'red',
-  }
-  let on = {
-    color: 'green',
   }
 
   return (
@@ -87,8 +79,8 @@ function UserHome(props) {
                 mode="horizontal"
               >
 
-                <Menu.Item key="usersPoints" style={selected === 'usersPoints' ? off : on}>
-                  <Icon type="user" />{currentUserObj.firstName}'s Points
+                <Menu.Item key="usersPoints">
+                <Icon type="user"/>{currentUserObj.firstName}'s Points
                 </Menu.Item>
 
                 <Menu.Item key="addPoints">

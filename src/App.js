@@ -6,7 +6,7 @@ import {
   Switch,
   Redirect,
 } from "react-router-dom";
-import { Layout } from 'antd'
+import { Layout, Icon, Drawer } from 'antd'
 
 
 import { auth } from "./firebase";
@@ -24,6 +24,7 @@ function App() {
   const [user, setUser] = useGlobal('user')
   const [uid, setUid] = useGlobal('uid') 
   const [loading, setLoading] = useState(true)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
     auth.onAuthStateChanged((newUser) => {
@@ -38,6 +39,15 @@ function App() {
     auth.signOut();
     setUser(null);
     return <Redirect to="/login"/>
+  }
+
+  const openMenu = () => {
+    console.log('menu opened')
+    setVisible(true)
+  }
+
+  const onClose = () => {
+    setVisible(false)
   }
 
   const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -57,24 +67,6 @@ function App() {
     />
   );
 
-  // const RestrictedRoute = ({ component: Component, ...rest }) => (
-  //   <Route
-  //     {...rest}
-  //     render={props =>
-  //       !user ? (
-  //         <Component {...props} />
-  //       ) : (
-  //           <Redirect
-  //             to={{
-  //               pathname: "/",
-  //               state: { from: props.location }
-  //             }}
-  //           />
-  //         )
-  //     }
-  //   />
-  // );
-
   const { Header } = Layout;
 
     return (
@@ -83,9 +75,24 @@ function App() {
       <Router>
         <div>
             <Layout>
-              <Header style={{backgroundColor: '#547D8B', textAlign: 'center'}} className="header">
-              <span style={{fontSize: '2.4em'}}><b>Two D Stats</b></span>{ user? <span style={{float: 'right'}} onClick={logout}>Log Out</span> : null}
+              <Header style={{backgroundColor: '#8E44AD', textAlign: 'center'}} className="header">
+              {/* <span style={{float: 'left', fontSize: '2em', color: '#34495e'}} onClick={openMenu}><Icon type="menu-unfold"/></span> */}
+              <span style={{fontSize: '2.4em'}}><b>Two D Stats</b></span>
+              { user? <span style={{float: 'right'}} onClick={logout}>Log Out</span> : null}
               </Header>
+
+              <Drawer
+                title='Menu'
+                placement='left'
+                closable={false}
+                onClose={onClose}
+                visible={visible}
+              >
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+                <p>Some contents...</p>
+              </Drawer>
+
             </Layout>
            
           <Switch>
