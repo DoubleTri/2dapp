@@ -2,16 +2,23 @@ DONE!!  Add 'last weeks total' to usersPoints
 DONE!!  Add selected to text on userHome
 DONE!!  Replce 'loading...' with spinner on app.js
 DONE!!  Fix graph size
+DONE!!  Create invite email with correct url
+DOEN!!  Fix userHome menu
+DONE!!  Add cron-job url
+DONE!!  Replace menu with tabs
 
-Create invite email with correct url
 Create new email account for invitations
 Clean Up <Waiting /> in UserHome
-Fix userHome menu
+Header designed and moved to own folder
+Home screen icon
+Window icon and title 
 
 Clean up files
-Write rules
+Write Firebase rules
+Add 2d rules 
 Graph set number of past weeks
 User edit name and info
 Add realtime to UserHome sub components
-Home screen icon
 See past points by values
+Add Stripe payments
+email reminders when stats are down or idle 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect  } from 'react';
 import { auth, fireStore } from '../firebase'
-import {  Col, Menu, Icon  } from 'antd';
+import {  Col, Tabs, Icon  } from 'antd';
 
 import AddPoints from './addPoints/AddPoints'
 import UsersPoints from './usersPoints/UsersPoints'
@@ -49,58 +49,38 @@ function UserHome(props) {
     dbCheck()
   }, {});
 
-  let handleClick = (key) => {
-    setSelected(key.key)
-  }
 
-  let renderedThing = () => {
-    if (selected === 'waiting') {
-      return <Waiting twoD={obj.twoDFirstName} />
-    } else if (selected === 'addPoints') {
-      return <AddPoints twoDObj={twoDObj} id={id} partner={partner}  weekEnding={obj.weekEnding}/>
-    } else if (selected === 'graph') {
-      return <Graph currentUserObj={currentUserObj} twoDObj={twoDObj} />
-    } else if (selected === 'usersPoints') {
-      return <UsersPoints currentUserObj={currentUserObj} weekEnding={obj.weekEnding}/>
-    }
-  }
+  const TabPane = Tabs.TabPane;
 
   return (
     <div className="UserHome">
-      {obj ? 
+      {obj ?
         <Col xs={{ span: 20, offset: 2 }} sm={{ span: 16, offset: 4 }} style={{ marginTop: '5em' }} >
 
-        {twoDObj && currentUserObj ? 
+          {twoDObj && currentUserObj ?
             <div>
-              <Menu
-                className='userMenu'
-                onClick={handleClick}
-                selectedKeys={[selected]}
-                mode="horizontal"
-              >
 
-                <Menu.Item key="usersPoints">
-                <Icon type="user"/>{currentUserObj.firstName}'s Points
-                </Menu.Item>
+              <Tabs defaultActiveKey="1">
+                <TabPane tab={<span><Icon type="user" />{currentUserObj.firstName}'s Points</span>} key="1">
+                  <UsersPoints currentUserObj={currentUserObj} weekEnding={obj.weekEnding} />
+                </TabPane>
 
-                <Menu.Item key="addPoints">
-                  <Icon type="heart" />Give {twoDObj.firstName} Points
-                </Menu.Item>
+                <TabPane tab={<span><Icon type="heart" />Give {twoDObj.firstName} Points</span>} key="2">
+                  <AddPoints twoDObj={twoDObj} id={id} partner={partner} weekEnding={obj.weekEnding} />
+                </TabPane>
 
-                <Menu.Item key="graph">
-                  <Icon type="line-chart" />Graphs
-                </Menu.Item>
+                <TabPane tab={<span><Icon type="line-chart" />Graphs</span>} key="3">
+                  <Graph currentUserObj={currentUserObj} twoDObj={twoDObj} />
+                </TabPane>
+              </Tabs>
 
-              </Menu>
             </div>
             :
             null}
-
-          {renderedThing()}
-
+          {selected === 'waiting' ? <Waiting twoD={obj.twoDFirstName} /> : null}
         </Col>
         :
-          <Spinner />
+        <Spinner />
       }
     </div>
   );
