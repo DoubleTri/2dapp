@@ -6,13 +6,13 @@ DONE!!  Create invite email with correct url
 DOEN!!  Fix userHome menu
 DONE!!  Add cron-job url
 DONE!!  Replace menu with tabs
+DONE!!  Home screen icon
+DONE!!  Window icon and title 
+DONE!!  Header designed and moved to own folder
+
+Clean Up <Waiting /> in UserHome
 
 Create new email account for invitations
-Clean Up <Waiting /> in UserHome
-Header designed and moved to own folder
-Home screen icon
-Window icon and title 
-
 Clean up files
 Write Firebase rules
 Add 2d rules 

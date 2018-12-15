@@ -17,6 +17,7 @@ import Login from './components/Login';
 import UserHome from './components/UserHome';
 import CreateAccount from './components/CreateAccount';
 import Invite from './components/Invite';
+import Header from './components/header/Header'
 import Spinner from './components/Spinner'
 
 function App() {
@@ -38,7 +39,7 @@ function App() {
     console.log('logged out...')
     auth.signOut();
     setUser(null);
-    return <Redirect to="/login"/>
+    //return <Redirect to="/login"/>
   }
 
   const openMenu = () => {
@@ -67,33 +68,14 @@ function App() {
     />
   );
 
-  const { Header } = Layout;
+  // const { Header } = Layout;
 
     return (
       loading ? <Spinner />
       : 
       <Router>
         <div>
-            <Layout>
-              <Header style={{backgroundColor: '#8E44AD', textAlign: 'center'}} className="header">
-              {/* <span style={{float: 'left', fontSize: '2em', color: '#34495e'}} onClick={openMenu}><Icon type="menu-unfold"/></span> */}
-              <span style={{fontSize: '2.4em'}}><b>Two D Stats</b></span>
-              { user? <span style={{float: 'right'}} onClick={logout}>Log Out</span> : null}
-              </Header>
-
-              <Drawer
-                title='Menu'
-                placement='left'
-                closable={false}
-                onClose={onClose}
-                visible={visible}
-              >
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-                <p>Some contents...</p>
-              </Drawer>
-
-            </Layout>
+<Header />
            
           <Switch>
 

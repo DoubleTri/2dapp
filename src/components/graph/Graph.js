@@ -44,18 +44,6 @@ function Graph(props) {
     <div className="graph">
 
     <h3>This is the Graph section</h3>
-
-    <section id="clickHandler">
-            <h2>Click Handler</h2>
-
-            <p>
-              The chart will send out a clickHandler event from the dataPoints (see above). The
-              dataPoints will need to be set. This can be used by your react application in anyway
-              you would require. The event handler provides the point data.
-            </p>
-            </section>
-
-     
      
   
 <Col span={20} offset={2} >

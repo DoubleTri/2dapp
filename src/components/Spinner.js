@@ -6,7 +6,7 @@ function Spinner() {
     return (
         <div className='heartLoader'>
         <BeatLoader
-        color={'red'}
+        color={'#4c1965ff'}
       />
       </div>
     )
