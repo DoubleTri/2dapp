@@ -9,8 +9,11 @@ DONE!!  Replace menu with tabs
 DONE!!  Home screen icon
 DONE!!  Window icon and title 
 DONE!!  Header designed and moved to own folder
+DONE!!  Graph size on small screens
+DONE!!  Point total added to graph pastWeek
 
 Clean Up <Waiting /> in UserHome
+iPhone homwscreen icon
 
 Create new email account for invitations
 Clean up files
@@ -21,4 +24,6 @@ User edit name and info
 Add realtime to UserHome sub components
 See past points by values
 Add Stripe payments
-email reminders when stats are down or idle 
+Email reminders when stats are down or idle
+Graph to heart animation  
+

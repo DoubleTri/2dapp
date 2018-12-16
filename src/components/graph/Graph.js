@@ -11,12 +11,12 @@ function Graph(props) {
   const [twoDObj, setTwoDObj] = useState(props.twoDObj)
   const [weekEnding, setWeekEnding] = useState(null) 
   const [pastWeek, setPastWeek] = useState(null)
+  const [pointTotal, setPointTotal] = useState(null)
   const [width, setWidth] = useState(window.innerWidth)
 
   useEffect(() => {
     let handleResize = () => {
       setWidth(window.innerWidth)
-      console.log(width)
     }
     window.addEventListener('resize', handleResize)
     return () => {
@@ -38,7 +38,7 @@ function Graph(props) {
   let data = [dbData];
 
   let height = 300
-  let graphWidth = width/2
+  let graphWidth = width <= 576 ? width : width/2
 
   return (
     <div className="graph">
@@ -46,14 +46,14 @@ function Graph(props) {
     <h3>This is the Graph section</h3>
      
   
-<Col span={20} offset={2} >
-<div style={{  display: 'table', margin: '0 auto'}} >
+<Col>
+<div style={{ marginLeft: '-2em'}}>
       <LineChart
         axes
         dataPoints
         grid
         xType={'text'}
-        clickHandler={(d) => `${setPastWeek(d.id)} ${setWeekEnding(d.x)}`}
+        clickHandler={(d) => `${setPastWeek(d.id)} ${setWeekEnding(d.x)} ${setPointTotal(d.y)}`}
         width={graphWidth}
         height={height}
         data={data}
@@ -62,10 +62,11 @@ function Graph(props) {
   </Col>
 
 <Col span={20} offset={2} >
-      <div>{!weekEnding ? null : <div style={{ marginBottom: '10px'}}><b>{weekEnding}</b></div>}</div>
+      <div>{!weekEnding ? null : <div style={{ marginBottom: '10px'}}><b>{weekEnding} <p>Total Points = {pointTotal}</p></b>{console.log(weekEnding)}</div>}</div>
 
       <div>{!pastWeek ? null :
-        <div>{pastWeek.map((pointObj, i) => {
+        <div>
+        {pastWeek.map((pointObj, i) => {
           // return console.log(pointObj)
           return <li className='pointEvent' key={i}><span id="pointTitleLine"><b>{pointObj.value} {pointObj.value > 1 ? 'Points' : 'Point'}</b> {moment(pointObj.date).calendar()} </span>
             <br /> {pointObj.reason} <hr /></li>
@@ -73,11 +74,6 @@ function Graph(props) {
         }</div>
       }</div>
     </Col>
-
-          
-
-
-
     </div>
   );
 }
