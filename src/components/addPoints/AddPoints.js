@@ -11,6 +11,7 @@ function AddPointsFormForm(props) {
 
 const [pointObj, setPointObj] = useState(null);
 const [pointTotal, setPointTotal] = useState(null);
+const [hearts, setHearts] = useState(false)
 const [twoDObj, setTwoDObj] = useState(null)
 
     useEffect(() => {
@@ -49,6 +50,11 @@ const handleSubmit = (e) => {
         newPointsObj[newPoints] = firebase.firestore.FieldValue.arrayUnion({ value: pointObj.value, reason: pointObj.reason, date: Date.now() })
         db.update(newPointsObj);
     })
+
+    setHearts(true)
+    setTimeout(() => {
+        setHearts(false)
+    }, 1500);
         
     props.form.resetFields()
 }
@@ -107,6 +113,22 @@ const { getFieldDecorator } = props.form;
                 })}
             </div>
             : "Loading..." }
+
+            {hearts ? 
+                
+            <div id="hearts">
+                <div className="heart1">&hearts;</div>
+                <div className="heart2">&hearts;</div>
+                <div className="heart3">&hearts;</div>
+                <div className="heart4">&hearts;</div>
+                <div className="heart5">&hearts;</div>
+                <div className="heart6">&hearts;</div>
+                <div className="heart7">&hearts;</div>
+                <div className="heart8">&hearts;</div>
+            </div>
+
+            : null}
+            
     
         </div>
     );
